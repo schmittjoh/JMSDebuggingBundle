@@ -8,7 +8,8 @@ Key features include:
 
 - better exception handling while Symfony2 is booting (especially for configuration)
 - highly relevant help for errors you encounter
-
+- http://www.screencast.com/users/Johanness/folders/Jing/media/a9049f71-4cd8-4752-97f5-b444ce4af2f1
+- http://www.screencast.com/users/Johanness/folders/Jing/media/c24888e8-9629-46b1-8899-aafc49d9672a
 
 Installation
 ============
