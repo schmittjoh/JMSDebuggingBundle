@@ -13,7 +13,7 @@ class DiDataCollector extends DataCollector
 
     public function collect(Request $request, Response $response, \Exception $ex = null)
     {
-        $this->data['debug'] = $this->container->getParameter('jms.di_debugger.debug');
+        $this->data['debug'] = $this->container->getParameter('jms.debugging.debug');
         $this->data['container_name'] = $name = $this->generateContainerName();
         $this->data['cache_dir'] = $this->container->getParameter('kernel.cache_dir');
     }
