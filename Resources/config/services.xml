@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="jms.debugging.response_listener.class">JMS\DebuggingBundle\Listener\ResponseListener</parameter>
+        
+        <parameter key="jms.debugging.serializer.class">Symfony\Component\Serializer\Serializer</parameter>
+        <parameter key="jms.debugging.normalizer.class">JMS\DebuggingBundle\Serializer\ProfilerNormalizer</parameter>
+        <parameter key="jms.debugging.encoder.class">Symfony\Component\Serializer\Encoder\JsonEncoder</parameter>
+    </parameters>
+
+    <services>
+      
+        <service id="jms.debugging.response_listener" class="%jms.debugging.response_listener.class%" scope="request">
+            <argument type="service" id="jms.debugging.normalizer" />
+            <argument type="service" id="profiler" />
+            <argument>%jms.debugging.debug%</argument>
+            <argument>%jms.debugging.auto_help%</argument>
+            <tag name="kernel.listener" event="onCoreResponse" />
+        </service>
+        
+        <service id="jms.debugging.normalizer" class="%jms.debugging.normalizer.class%" public="false">
+            <argument type="service" id="kernel" />
+        </service>
+    </services>
+</container>

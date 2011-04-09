@@ -1,0 +1,101 @@
+/*
+ * Copyright 2011 Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+{namespace jms.templates.help_resources}
+
+/**
+ * Renders the help resources
+ */
+{template .block}
+<div class="block" id="jms-ui-help-resources-block">
+    <div id="jms-ui-help-resources-header"></div>
+    <div id="jms-ui-help-resources-count"></div>
+    <div id="jms-ui-help-resources">
+        <p>Click the "search" button at the top right of this block to search for help resources.</p>
+        <p>You can also turn on automatic search for help messages by putting the following in your config_dev.yml:</p>
+        <pre class="jms-ui-yaml-code">
+            jms_debugging:{\n}
+            {sp}{sp}{sp}{sp}auto_help: true
+        </pre>
+    </div>
+    <ul id="jms-ui-help-bottom-navigation">
+        <li><a href="#" id="jms-ui-help-feedback-link">Give us Feedback</a></li>
+    </ul>
+    <div class="clear_fix"></div>
+</div>
+{/template}
+
+/**
+ * Template for the resource list
+ * @param resources
+ */
+{template .list}
+<ol id="jms-ui-help-resources-ol">
+    {foreach $resource in $resources}
+        <li class="jms-ui-help-resources-li{if isFirst($resource)} jms-ui-help-resources-li-first{elseif isLast($resource)} jms-ui-help-resources-li-last{/if}">
+            <div>
+                <span class="jms-ui-help-resources-li-title">
+                    <h4>
+                        <a href="{$resource.uri}" onmousedown="jms_url(this, '{$resource.id}')">{$resource.title}</a>
+                    </h4>
+                </span>
+                <div class="jms-ui-help-resources-li-content">
+                    {$resource.content}
+                </div>
+                <div class="jms-ui-help-resources-li-uri">{$resource.uri}</div>
+            </div>
+        </li>
+    {ifempty}
+        <li class="jms-ui-help-resources-li">
+            <strong>Thanks for submitting this error report!</strong>
+            <br/><br/>
+            Unfortunately, this bundle is still in an early development stage
+            and we cannot display any help for this problem, yet.
+        </li>
+    {/foreach}
+</ol>
+{/template}
+
+/**
+ * This templates is used for displaying the feedback dialog.
+ */
+{template .feedback_dialog}
+
+    Whether you have a cool blog post that you would like us to display here, or some other 
+    suggestions, you can use the form below to share them with us.
+    <br/><br/>
+    If you would like to receive a response, include your contact information in the form below.
+    Please respect that we will not be able to reply to all messages.
+    <br /><br />
+    <textarea name="feedback" id="jms-ui-help-resources-feedback" required="required"></textarea>    
+{/template}
+
+/**
+ * This template is used when a server-side error occurs
+ * @param error The error message, text-only
+ */
+{template .server_error}
+   <div class="jms-ui-help-resources-server-error">
+      {$error}
+   </div>
+{/template}
+
+/**
+ * Template for individual resources
+ */
+{template .resource}
+  
+{/template}

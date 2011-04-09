@@ -1,0 +1,415 @@
+#jms-debugging-error-reporting {
+	  display: block;
+	  min-height: 40px;
+    margin-bottm: 20px;
+}
+
+#jms-ui-report-dialog {
+	  clear: both;
+}
+
+#jms-ui-report-dialog-attr {
+    float: right;
+    margin-top: -20px;
+    margin-right: -20px;
+    font-size: 10px;
+    font-color: #f0f0f0;	
+}
+
+#jms-ui-report-dialog-send {
+    float: right;
+	  margin-top: 10px;
+	  margin-right: -5px;
+	  margin-bottom: -15px;
+	  font-size: 16px;
+	  padding: 5px;
+}
+
+#jms-ui-report-dialog-auto-help {
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 14px;	
+}
+
+#jms-ui-report-dialog ul {
+    margin-left: 50px;
+    margin-bottom: 10px;
+}
+
+#jms-ui-report-dialog ul > li {
+    list-style-type: disc;	
+}
+
+#jms-ui-report-dialog ol {
+    margin-left: 20px;
+    margin-top: -15px;
+}
+
+#jms-ui-report-dialog li {
+    font-size: 14px;
+    line-height: 20px;
+    color: #868686;
+}
+
+#jms-debugging-error-reporting .jms-ui-report-button {
+    float: right;
+    font-size: 16px;
+    
+    cursor: pointer;
+    margin-right: 15px;
+    margin-bottom: 20px;
+}
+
+#jms-debugging-error-reporting .goog-zippy-collapsed, .sf-exceptionreset .goog-zippy-expanded {
+    padding-left: 25px;
+    background-repeat: no-repeat;
+}
+
+#jms-ui-help-resources-header .jms-ui-help-resources-header-button.goog-zippy-collapsed, #jms-ui-help-resources-header .jms-ui-help-resources-header-button.goog-zippy-expanded {
+	  padding-left: 0px;
+	  padding-right: 25px;
+    background-position: right;	
+    background-repeat: no-repeat;
+}
+
+#jms-debugging-error-reporting .goog-zippy-collapsed, 
+#jms-ui-help-resources-header .jms-ui-help-resources-header-button.goog-zippy-collapsed {
+    background-image: url(/bundles/framework/images/blue_picto_more.gif);
+}
+
+#jms-debugging-error-reporting .goog-zippy-expanded,
+#jms-ui-help-resources-header .jms-ui-help-resources-header-button.goog-zippy-expanded {
+    background-image: url(/bundles/framework/images/blue_picto_less.gif);	
+}
+
+.jms-ui-report-button-loading-image {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: -20px;
+    top: -20px;
+}
+
+#jms-debugging-error-reporting .jms-ui-yaml-code, #jms-ui-help-resources-block .jms-ui-yaml-code {
+    background-color: #f0f0f0;
+    overflow-y: auto;	
+    padding: 10px;
+    border: 1px #ccc solid;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+}
+
+/**
+ * Help Resources CSS
+ */
+#jms-ui-help-resources-block {
+    min-height: 20px;	
+}
+#jms-ui-help-resources-header {
+    float: left;	
+}
+
+#jms-ui-help-resources-header > .jms-ui-help-resources-header-button {
+	  font-family: Arial,Helvetica,sans-serif;
+	  font-size: 16px;
+	  font-weight: bold;
+	  margin-bottom: 16px;
+	  cursor: pointer;
+}
+
+#jms-ui-help-resources {
+    clear: both;	
+}
+
+#jms-ui-help-resources-count
+{
+    float:right;
+    width: 200px;
+    text-align:right;
+}
+
+#jms-ui-help-resources-count > div, #jms-ui-help-resources-count > span {
+    float: right;	
+    margin-left: 5px;
+}
+
+#jms-ui-help-resources-count > span
+{
+    display:inline-block;
+    background-color:#aacd4e;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    padding:4px;
+    color:white;
+    margin-right:2px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+#jms-ui-help-bottom-navigation {
+    clear: both;
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: -30px;
+}
+
+#jms-ui-help-bottom-navigation > li {
+	  width: 100px;
+	  margin-left: auto;
+	  margin-right: auto;
+}
+
+#jms-ui-help-bottom-navigation a {
+	  text-decoration: underline;
+}
+
+#jms-ui-help-resources-feedback {
+	 width: 98%;
+	 height: 150px;
+}
+
+#jms-debugging-error-reporting .anonymous {
+    color: #ff0000;
+}
+
+/**
+ * Resources List
+ */
+#jms-ui-help-resources-ol .jms-ui-help-resources-li {
+    list-style: none;
+    width: 500px;
+}
+
+#jms-ui-help-resources-ol .jms-ui-help-resources-li-title {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#jms-ui-help-resources-ol .jms-ui-help-resources-li-title a {
+	  color: #aacd4e;
+	  font-weight: bold;
+}
+
+#jms-ui-help-resources-ol .jms-ui-help-resources-li-content {
+    font-size: 12px;
+    color: #868686;	
+}
+
+#jms-ui-help-resources-ol .jms-ui-help-resources-li-uri {
+	  color: #000000;
+}
+
+/*
+ * Copyright 2010 The Closure Library Authors. All Rights Reserved.
+ * This code contains modifications over the original code. 
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/* Author: slightlyoff@google.com (Alex Russell) */
+/* Author: eae@google.com (Emil A Eklund) */
+
+.goog-tooltip {
+  background: #ffe;
+  border: 1px solid #999;
+  border-width: 1px 2px 2px 1px;
+  width: 430px;
+  padding: 6px;
+  z-index: 30000;
+}
+
+/* Imageless button styles. */
+#jms-ui-report-dialog-send .goog-css3-button, #jms-ui-help-resources-block .goog-css3-button {
+  margin: 0 2px;
+  padding: 3px 6px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  cursor: default;
+  outline: none;
+  font-family: Arial, sans-serif;
+  color: #000;
+  border: 1px solid #bbb;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  /* TODO(eae): Change this to -webkit-linear-gradient once
+                https://bugs.webkit.org/show_bug.cgi?id=28152 is resolved. */
+  background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#f9f9f9),
+      to(#e3e3e3));
+  background: -moz-linear-gradient(top, #f9f9f9, #e3e3e3);
+}
+
+
+/* Styles for different states (hover, active, focused, open, checked). */
+#jms-ui-report-dialog-send .goog-css3-button-hover, #jms-ui-help-resources-block .goog-css3-button-hover {
+  border-color: #939393 !important;
+}
+
+#jms-ui-report-dialog-send .goog-css3-button-focused, #jms-ui-help-resources-block .goog-css3-button-focused {
+  border-color: #444;
+}
+
+#jms-ui-report-dialog-send .goog-css3-button-active, #jms-ui-report-dialog-send .goog-css3-button-open,
+#jms-ui-help-resources-block .goog-css3-button-active, #jms-ui-help-resources-block .goog-css3-button-open {
+  border-color: #444 !important;
+  background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#e3e3e3),
+      to(#f9f9f9));
+  background: -moz-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+#jms-ui-report-dialog-send .goog-css3-button-disabled, #jms-ui-help-resources-block .goog-css3-button-disabled {
+  color: #888;
+}
+
+#jms-ui-report-dialog-send .goog-css3-button-primary, #jms-ui-help-resources-block .goog-css3-button-primary {
+  font-weight: bold;
+}
+
+
+/*
+ * Pill (collapsed border) styles.
+ */
+#jms-ui-report-dialog-send .goog-css3-button-collapse-right, #jms-ui-help-resources-block .goog-css3-button-collapse-right {
+  margin-right: 0 !important;
+  border-right: 1px solid #bbb;
+  -webkit-border-top-right-radius: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  -moz-border-radius-bottomright: 0px;
+}
+
+#jms-ui-report-dialog-send .goog-css3-button-collapse-left, #jms-ui-help-resources-block .goog-css3-button-collapse-left {
+  border-left: 1px solid #f9f9f9;
+  margin-left: 0 !important;
+  -webkit-border-top-left-radius: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-topleft: 0px;
+  -moz-border-radius-bottomleft: 0px;
+}
+
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ * This code contains modifications over the original code.  
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Cross-browser implementation of the "display: inline-block" CSS property.
+ * See http://www.w3.org/TR/CSS21/visuren.html#propdef-display for details.
+ * Tested on IE 6 & 7, FF 1.5 & 2.0, Safari 2 & 3, Webkit, and Opera 9.
+ *
+ * @author attila@google.com (Attila Bodis)
+ */
+
+/*
+ * Default rule; only Safari, Webkit, and Opera handle it without hacks.
+ */
+.goog-inline-block {
+  position: relative;
+  display: -moz-inline-box; /* Ignored by FF3 and later. */
+  display: inline-block;
+}
+
+/*
+ * Pre-IE7 IE hack.  On IE, "display: inline-block" only gives the element
+ * layout, but doesn't give it inline behavior.  Subsequently setting display
+ * to inline does the trick.
+ */
+* html .goog-inline-block {
+  display: inline;
+}
+
+/*
+ * IE7-only hack.  On IE, "display: inline-block" only gives the element
+ * layout, but doesn't give it inline behavior.  Subsequently setting display
+ * to inline does the trick.
+ */
+*:first-child+html .goog-inline-block {
+  display: inline;
+}
+
+/*
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
+ * This code contains modifications over the original code.  
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/*
+ * Standard styling for goog.ui.Dialog.
+ *
+ * @author ssaviano@google.com (Steven Saviano)
+ * @author attila@google.com (Attila Bodis)
+ */
+
+
+.modal-dialog {
+	width: 500px;
+  background: #c1d9ff;
+  border: 1px solid #3a5774;
+  color: #000;
+  padding: 4px;
+  position: absolute;
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+  color: #06c;
+  cursor: pointer;
+}
+
+.modal-dialog-bg {
+  background: #666;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+.modal-dialog-title {
+  background: #e0edfe;
+  color: #000;
+  cursor: pointer;
+  font-size: 120%;
+  font-weight: bold;
+
+  /* Add padding on the right to ensure the close button has room. */
+  padding: 8px 31px 8px 8px;
+
+  position: relative;
+  _zoom: 1; /* Ensures proper width in IE6 RTL. */
+}
+
+.modal-dialog-title-close {
+  /* Client apps may override the URL at which they serve the sprite. */
+  background: #e0edfe url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -528px 0;
+  cursor: default;
+  height: 15px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 15px;
+  vertical-align: middle;
+}
+
+.modal-dialog-buttons,
+.modal-dialog-content {
+  background-color: #fff;
+  padding: 8px;
+}
+
+.modal-dialog-buttons {
+  text-align: right;	
+}
+
+.goog-buttonset-default {
+  font-weight: bold;
+}
