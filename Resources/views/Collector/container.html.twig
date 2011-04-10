@@ -3,10 +3,10 @@
 {% block menu %}
 <span class="label">
     <span class="icon">{% spaceless %}
-    {# 
+    {#
         Icons License
         =============
-        
+
         Glyphish icons (http://glyphish.com/) created by Joseph Wain
         (http://www.penandthink.com/) are shared under a Creative Commons Attribution
         license (http://creativecommons.org/licenses/by/3.0/us/).
@@ -17,25 +17,26 @@
 </span>
 {% endblock %}
 
-{% block panel %}
+{% block head %}
+    {{ parent() }}
     <link href="{{ asset("bundles/jmsdebugging/css/autocomplete.css") }}" rel="stylesheet" type="text/css" media="screen" />
     <style type="text/css">
         #jms-dic-graph {
             width: 100%;
             height: 100%;
         }
-        
+
         .jms-dic-searchinput {
             position: absolute;
             top: 5px;
             left: 0;
         }
-        
+
         .jms-ui-directed-graph {
             position: relative;
             margin-top: 5px;
         }
-        
+
         .jms-ui-node {
             position: absolute;
             border:1px solid #000;
@@ -44,25 +45,27 @@
             background-color: #efefef;
             padding:5px;
             font-size:12px;
-        }        
-        
+        }
+
         .jms-ui-node-highlight {
             background-color: #fffeee;
         }
     </style>
+{% endblock %}
 
+{% block panel %}
     <h2>Dependency Injection Container</h2>
-    
+
     <div id="jms-dic-graph"></div>
-    
+
     {% if collector.debug == true %}
         <script language="javascript" type="text/javascript" src="http://localhost:9810/compile?id=dic"></script>
     {% else %}
         <script language="javascript" type="text/javascript" src="{{ asset("bundles/jmsdebugging/javascript/build/dic-graph.js") }}"></script>
     {% endif %}
-    
+
     <script language="javascript" type="text/javascript">
         jms_dic_graph_install('jms-dic-graph', {{ collector.graph|json_encode|raw }});
     </script>
-    
+
 {% endblock %}
