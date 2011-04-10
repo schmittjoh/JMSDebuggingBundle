@@ -59,13 +59,13 @@
     <div id="jms-dic-graph"></div>
 
     {% if collector.debug == true %}
-        <script language="javascript" type="text/javascript" src="http://localhost:9810/compile?id=dic"></script>
+        <script language="javascript" type="text/javascript" src="http://localhost:9810/compile?id=dic-visualizer"></script>
     {% else %}
-        <script language="javascript" type="text/javascript" src="{{ asset("bundles/jmsdebugging/javascript/build/dic-graph.js") }}"></script>
+        <script language="javascript" type="text/javascript" src="{{ asset("bundles/jmsdebugging/javascript/build/dic-visualizer.js") }}"></script>
     {% endif %}
 
     <script language="javascript" type="text/javascript">
-        jms_dic_graph_install('jms-dic-graph', {{ collector.graph|json_encode|raw }});
+        jms_dic_visualizer_install('jms-dic-graph', {{ collector.graph|json_encode|raw }});
     </script>
 
 {% endblock %}
