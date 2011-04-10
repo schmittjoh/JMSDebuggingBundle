@@ -2,6 +2,8 @@
 
 namespace JMS\DebuggingBundle\DataCollector;
 
+use Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass;
+
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +33,11 @@ class DiDataCollector extends DataCollector
     public function getGraph()
     {
         $container = $this->getContainerBuilder();
+
+        // update the service graph
+        $pass = new AnalyzeServiceReferencesPass();
+        $pass->process($container);
+
         $graph = $container->getCompiler()->getServiceReferenceGraph();
         $services = array();
         foreach ($container->getDefinitions() as $id => $definition) {
