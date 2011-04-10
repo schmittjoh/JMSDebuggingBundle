@@ -28,7 +28,7 @@ goog.require('goog.style');
  * @extends {goog.ui.Control}
  */
 jms.ui.ReportButton = function(content, opt_domHelper) {
-	goog.base(this, content, goog.ui.ControlRenderer.getCustomRenderer(goog.ui.ControlRenderer, jms.ui.ReportButton.CSS_CLASS), opt_domHelper);
+    goog.base(this, content, goog.ui.ControlRenderer.getCustomRenderer(goog.ui.ControlRenderer, jms.ui.ReportButton.CSS_CLASS), opt_domHelper);
 };
 goog.inherits(jms.ui.ReportButton, goog.ui.Control);
 

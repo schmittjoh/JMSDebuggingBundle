@@ -94,56 +94,56 @@ jms.app.ErrorReporting.prototype.enterDocument = function() {
     
     var dom = this.getDomHelper();
     this.zippy_ = new goog.ui.Zippy(this.getChild('report-button').getElement(), goog.bind(function() {
-    	var elem = soy.renderAsFragment(jms.templates.error_dialog.index, {
-			'data': this.yamlData_
-		});
-    	
-    	dom.append(this.getElement(), elem);
-    	
-    	return elem;
+        var elem = soy.renderAsFragment(jms.templates.error_dialog.index, {
+            'data': this.yamlData_
+        });
+        
+        dom.append(this.getElement(), elem);
+        
+        return elem;
     }, this), false, undefined, this.getDomHelper());
     
     this.getChild('resources').renderBefore(this.getDomHelper().getNextElementSibling(this.getElement()));
     
     this.handler_.listen(dom.getElement('jms-ui-help-feedback-link'), goog.events.EventType.CLICK, function(e) {
-    	e.preventDefault();
-    	this.showFeedbackDialog();
+        e.preventDefault();
+        this.showFeedbackDialog();
     });
 };
 
 jms.app.ErrorReporting.prototype.showFeedbackDialog = function() {
-	this.dialog_.setTitle("Give us Feedback");
-	this.dialog_.setContent(jms.templates.help_resources.feedback_dialog());
-	
-	var buttonSet = new goog.ui.Dialog.ButtonSet(this.getDomHelper());
-	buttonSet.addButton({key: 'send_feedback', caption: 'Send Feedback'}, true, false);
-	buttonSet.addButton({key: 'cancel', caption: 'Cancel'}, false, true);
-	this.dialog_.setButtonSet(buttonSet);
-	
-	this.dialog_.setVisible(true);
+    this.dialog_.setTitle("Give us Feedback");
+    this.dialog_.setContent(jms.templates.help_resources.feedback_dialog());
+    
+    var buttonSet = new goog.ui.Dialog.ButtonSet(this.getDomHelper());
+    buttonSet.addButton({key: 'send_feedback', caption: 'Send Feedback'}, true, false);
+    buttonSet.addButton({key: 'cancel', caption: 'Cancel'}, false, true);
+    this.dialog_.setButtonSet(buttonSet);
+    
+    this.dialog_.setVisible(true);
 };
 
 jms.app.ErrorReporting.prototype.onDialogSelect = function(e) {
-	if ('send_feedback' === e.key) {
-		var feedbackInput = this.getDomHelper().getElement('jms-ui-help-resources-feedback');
-		if ('' === feedbackInput.value) {
-			goog.style.setStyle(feedbackInput, 'border', '1px #ff0000 solid');
-			e.preventDefault();
-			return;
-		}
-		
-		this.sendFeedback(feedbackInput.value);
-	}
+    if ('send_feedback' === e.key) {
+        var feedbackInput = this.getDomHelper().getElement('jms-ui-help-resources-feedback');
+        if ('' === feedbackInput.value) {
+            goog.style.setStyle(feedbackInput, 'border', '1px #ff0000 solid');
+            e.preventDefault();
+            return;
+        }
+        
+        this.sendFeedback(feedbackInput.value);
+    }
 };
 
 jms.app.ErrorReporting.prototype.sendFeedback = function(text) {
-	var data = {
-		'text': text,
-		'report_id': this.reportId_
-	};
-	var headers = {'client_version': jms.app.ErrorReporting.CLIENT_VERSION};
-	
-	goog.net.CrossDomainRpc.send(jms.app.ErrorReporting.FEEDBACK_URL, undefined, undefined, data, headers);
+    var data = {
+        'text': text,
+        'report_id': this.reportId_
+    };
+    var headers = {'client_version': jms.app.ErrorReporting.CLIENT_VERSION};
+    
+    goog.net.CrossDomainRpc.send(jms.app.ErrorReporting.FEEDBACK_URL, undefined, undefined, data, headers);
 };
 
 jms.app.ErrorReporting.prototype.sendReport = function() {
@@ -177,20 +177,20 @@ jms.app.ErrorReporting.prototype.onSendComplete = function(e) {
         
         var error;
         if (false === e.target.responseTextIsJson_) {
-        	error = e.target.responseText;
+            error = e.target.responseText;
         } else {
-        	error = 'Sorry, an error occurred while retrieving help resources, please try again later.';
+            error = 'Sorry, an error occurred while retrieving help resources, please try again later.';
         }
         
-    	soy.renderElement(
-    		this.getDomHelper().getElement('jms-ui-help-resources'),
-    		jms.templates.help_resources.server_error,
-    		{
-    			error: error
-    		}
-    	);
+        soy.renderElement(
+            this.getDomHelper().getElement('jms-ui-help-resources'),
+            jms.templates.help_resources.server_error,
+            {
+                error: error
+            }
+        );
 
-    	return;
+        return;
     }
     
     // remove send button
@@ -216,11 +216,11 @@ jms.app.ErrorReporting.prototype.onSendComplete = function(e) {
     // generate template
     this.getChild('resources').getChild('counter').setResourceCount(c);
     soy.renderElement(
-    	this.getDomHelper().getElement('jms-ui-help-resources'),
-    	jms.templates.help_resources.list, 
-    	{
-    		resources: convertedData
-    	}
+        this.getDomHelper().getElement('jms-ui-help-resources'),
+        jms.templates.help_resources.list, 
+        {
+            resources: convertedData
+        }
     );
 };
 
@@ -232,15 +232,15 @@ jms.app.ErrorReporting.prototype.onSendComplete = function(e) {
  * @param {string} resourceId
  */
 jms.app.ErrorReporting.prototype.onResourceMouseDown = function(elem, resourceId) {
-	var url = goog.uri.utils.appendParams(
-		jms.app.ErrorReporting.REDIRECT_URL,
-		'report_id', this.reportId_,
-		'resource_id', resourceId,
-		'client_version', jms.app.ErrorReporting.CLIENT_VERSION,
-		'url', elem.href
-	);
-	
-	elem.href = url;
+    var url = goog.uri.utils.appendParams(
+        jms.app.ErrorReporting.REDIRECT_URL,
+        'report_id', this.reportId_,
+        'resource_id', resourceId,
+        'client_version', jms.app.ErrorReporting.CLIENT_VERSION,
+        'url', elem.href
+    );
+    
+    elem.href = url;
 };
 
 /**

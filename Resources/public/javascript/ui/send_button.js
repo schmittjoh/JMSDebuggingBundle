@@ -26,19 +26,19 @@ goog.require('goog.ui.Css3ButtonRenderer');
  * @extends {goog.ui.Button}
  */
 jms.ui.SendButton = function(opt_label, opt_domHelper) {
-	var label = opt_label || 'Send Report';
-	goog.base(this, label, goog.ui.Css3ButtonRenderer.getInstance(), opt_domHelper);
-	
-	this.loading_ = false;
+    var label = opt_label || 'Send Report';
+    goog.base(this, label, goog.ui.Css3ButtonRenderer.getInstance(), opt_domHelper);
+    
+    this.loading_ = false;
 
-	var dom = this.getDomHelper();
-	this.loadingImage_ = dom.createDom('img', {
-		'src': jms.ui.SendButton.LOADING_IMAGE,
-		'alt': 'Loading...',
-		'class': 'jms-ui-report-button-loading-image'
-	});
-	dom.getDocument().body.appendChild(this.loadingImage_);
-	this.updateLoadingImage_();
+    var dom = this.getDomHelper();
+    this.loadingImage_ = dom.createDom('img', {
+        'src': jms.ui.SendButton.LOADING_IMAGE,
+        'alt': 'Loading...',
+        'class': 'jms-ui-report-button-loading-image'
+    });
+    dom.getDocument().body.appendChild(this.loadingImage_);
+    this.updateLoadingImage_();
 };
 goog.inherits(jms.ui.SendButton, goog.ui.Button);
 
@@ -51,30 +51,30 @@ jms.ui.SendButton.LOADING_IMAGE = 'data:image/gif;base64,R0lGODlhGAAYAPcAAAAAAAU
  * @param {boolean} bool
  */
 jms.ui.SendButton.prototype.setLoading = function(bool) {
-	this.loading_ = bool;
-	
-	if (this.isInDocument()) {
-		this.updateLoadingImage_();
-	}
+    this.loading_ = bool;
+    
+    if (this.isInDocument()) {
+        this.updateLoadingImage_();
+    }
 };
 
 /**
  * @override
  */
 jms.ui.SendButton.prototype.enterDocument = function() {
-	goog.base(this, 'enterDocument');
-	
-	this.updateLoadingImage_();
+    goog.base(this, 'enterDocument');
+    
+    this.updateLoadingImage_();
 };
 
 /**
  * @private
  */
 jms.ui.SendButton.prototype.updateLoadingImage_ = function() {
-	if (!this.loading_) {
-		goog.style.setPosition(this.loadingImage_, -1000, -1000);
-	} else {
-		var rect = goog.style.getBounds(this.getElement());
-		goog.style.setPosition(this.loadingImage_, rect.left + rect.width + 10, rect.top);
-	}
+    if (!this.loading_) {
+        goog.style.setPosition(this.loadingImage_, -1000, -1000);
+    } else {
+        var rect = goog.style.getBounds(this.getElement());
+        goog.style.setPosition(this.loadingImage_, rect.left + rect.width + 10, rect.top);
+    }
 };

@@ -34,16 +34,16 @@ jms.app.ErrorReporting.instance_;
  * @param {boolean} autoHelp
  */
 jms.app.ErrorReporting.install = function(data, yamlData, autoHelp) {
-	var dom = goog.dom.getDomHelper();
-	var app = new jms.app.ErrorReporting(data, yamlData, dom);
-	
-	var stackTrace = dom.getNextElementSibling((dom.getElementsByTagNameAndClass('div', 'block_exception'))[0]);
-	app.renderBefore(stackTrace);
-	jms.app.ErrorReporting.instance_ = app;
-	
-	if (autoHelp) {
-		app.sendReport();
-	}
+    var dom = goog.dom.getDomHelper();
+    var app = new jms.app.ErrorReporting(data, yamlData, dom);
+    
+    var stackTrace = dom.getNextElementSibling((dom.getElementsByTagNameAndClass('div', 'block_exception'))[0]);
+    app.renderBefore(stackTrace);
+    jms.app.ErrorReporting.instance_ = app;
+    
+    if (autoHelp) {
+        app.sendReport();
+    }
 };
 
 /**
@@ -51,7 +51,7 @@ jms.app.ErrorReporting.install = function(data, yamlData, autoHelp) {
  * @param {string} resourceId
  */
 jms.app.ErrorReporting.resourceMouseDownCallback = function(elem, resourceId) {
-	jms.app.ErrorReporting.instance_.onResourceMouseDown(elem, resourceId);
+    jms.app.ErrorReporting.instance_.onResourceMouseDown(elem, resourceId);
 };
 
 goog.exportSymbol('jms_install_error_reporting', jms.app.ErrorReporting.install);
