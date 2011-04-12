@@ -42,14 +42,19 @@ class DiDataCollector extends DataCollector
         $services = array();
         foreach ($container->getDefinitions() as $id => $definition) {
             $services[$id] = array(
-                'dependencies' => array(),
+                'public'        => $definition->isPublic(),
+                'dependencies'  => array(array(), array()),
             );
 
             if ($graph->hasNode($id)) {
                 $node = $graph->getNode($id);
 
+                foreach ($node->getInEdges() as $edge) {
+                    $services[$id]['dependencies'][0][] = $edge->getSourceNode()->getId();
+                }
+
                 foreach ($node->getOutEdges() as $edge) {
-                    $services[$id]['dependencies'][] = $edge->getDestNode()->getId();
+                    $services[$id]['dependencies'][1][] = $edge->getDestNode()->getId();
                 }
             }
         }

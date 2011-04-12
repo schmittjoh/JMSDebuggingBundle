@@ -20,6 +20,8 @@
 {% block head %}
     {{ parent() }}
     <link href="{{ asset("bundles/jmsdebugging/css/autocomplete.css") }}" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{ asset("bundles/jmsdebugging/css/menu.css") }}" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{ asset("bundles/jmsdebugging/css/menuitem.css") }}" rel="stylesheet" type="text/css" media="screen" />
     <style type="text/css">
         #jms-dic-graph {
             width: 100%;
@@ -27,12 +29,25 @@
         }
 
         .jms-dic-searchinput {
-            position: absolute;
-            top: 5px;
-            left: 0;
+            float: left;
         }
-
+        
+        .jms-ui-choice-field {
+            float: left;
+            margin-left: 10px;
+        }
+        
+        .jms-ui-choice-field > span {
+            float: left;
+        }
+        
+        .jms-ui-choice-field-choice {
+            margin-left: 5px;
+        }
+        
         .jms-ui-directed-graph {
+            clear: both;
+            float: left;
             position: relative;
             margin-top: 5px;
         }
@@ -46,9 +61,20 @@
             padding:5px;
             font-size:12px;
         }
+        
+        .jms-ui-node.goog-control-focused {
+            border:2px solid #000;
+        }
 
         .jms-ui-node-highlight {
             background-color: #fffeee;
+        }
+        
+        .jms-ui-service-node-private {
+            border-style: dashed;
+        }
+        .jms-ui-service-node-private.goog-control-focused {
+            border-style: dashed;
         }
     </style>
 {% endblock %}

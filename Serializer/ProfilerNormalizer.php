@@ -55,17 +55,6 @@ class ProfilerNormalizer extends AbstractNormalizer
         return $data;
     }
 
-    public function isNamespaceWhitelisted($namespace)
-    {
-        return 0 === strpos($namespace, 'Symfony\\')
-               || 0 === strpos($namespace, 'JMS\\SecurityExtraBundle\\')
-               || 0 === strpos($namespace, 'Sensio\\Bundle\\FrameworkExtraBundle\\')
-               || 0 === strpos($namespace, 'Assetic\\')
-               || 0 === strpos($namespace, 'Doctrine\\')
-               || 0 === strpos($namespace, 'Zend\\')
-        ;
-    }
-
     public function denormalize($data, $class, $format = null)
     {
         throw new \RuntimeException('denormalize() is currently not implemented');
@@ -178,12 +167,36 @@ class ProfilerNormalizer extends AbstractNormalizer
                     continue;
                 }
 
+                // additional heuristics for config data handling
+                if ('Symfony\Component\DependencyInjection\Loader\YamlFileLoader' === $trace['class'] && 'parseImports' === $trace['function']) {
+                    $trace['args'] = array(
+                        array('array', array()),
+                        array('string', basename($trace['args'][1][1]))
+                    );
+                }
+                if (('Symfony\Component\Yaml\Parser' === $trace['class'] && 'parse' === $trace['function'])) {
+                    $trace['args'] = array(
+                        array('string', 'XXX'),
+                    );
+                }
+
                 $data[$nb]['trace'][$key]['file'] = basename($trace['file']);
                 $data[$nb]['trace'][$key]['args'] = $this->purgeArgsRecursive($trace['args']);
             }
         }
 
         return $data;
+    }
+
+    private function isNamespaceWhitelisted($namespace)
+    {
+        return 0 === strpos($namespace, 'Symfony\\')
+               || 0 === strpos($namespace, 'JMS\\SecurityExtraBundle\\')
+               || 0 === strpos($namespace, 'Sensio\\Bundle\\FrameworkExtraBundle\\')
+               || 0 === strpos($namespace, 'Assetic\\')
+               || 0 === strpos($namespace, 'Doctrine\\')
+               || 0 === strpos($namespace, 'Zend\\')
+        ;
     }
 
     private function purgeArgsRecursive(array $args)
@@ -195,11 +208,26 @@ class ProfilerNormalizer extends AbstractNormalizer
                 $value = 'XXX';
             } else if ('array' === $type) {
                 $value = $this->purgeArgsRecursive($value);
+            } else if ('string' === $type) {
+                if ($this->isFilePath($value)) {
+                    $value = basename($value);
+                }
             }
 
             $args[$k] = array($type, $value);
         }
 
         return $args;
+    }
+
+    private function isFilePath($value)
+    {
+        // windows file paths: C:\ D:\ etc.
+        if (preg_match('#^[a-zA-Z]:\\\\#', $value)) {
+            return true;
+        }
+
+        // all other file paths, just check if string ends with a possible file name /file.php
+        return preg_match('#(?:/|\\\\)([^/\\\\]+)\.(?:php|xml|yml|twig|js|css|ini)$#', $value) > 0;
     }
 }
