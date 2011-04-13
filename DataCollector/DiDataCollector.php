@@ -59,6 +59,7 @@ class DiDataCollector extends DataCollector
                 }
             }
         }
+
         foreach ($container->getAliases() as $id => $alias) {
             $services[$id] = array(
                 'alias'         => true,
