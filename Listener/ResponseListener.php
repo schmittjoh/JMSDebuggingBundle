@@ -98,7 +98,7 @@ class ResponseListener
                     :
                     '<script language="javascript">'.file_get_contents(__DIR__.'/../Resources/public/javascript/build/error-reporting.js').'</script>'
             )
-            .'<script language="javascript">jms_install_error_reporting('.json_encode($data).', '.json_encode(trim($stringData)).', '.json_encode($this->autoHelp).');</script>'
+            .'<script language="javascript">jms_install_error_reporting('.json_encode(json_encode($data)).', '.json_encode(trim($stringData)).', '.json_encode($this->autoHelp).');</script>'
             .substr($content, $pos);
 
         $response->setContent($content);

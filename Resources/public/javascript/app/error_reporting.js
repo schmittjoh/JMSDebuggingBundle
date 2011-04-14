@@ -32,16 +32,17 @@ goog.require('soy');
 
 /**
  * @constructor
- * @param {!Object} data
- * @param {!string} yamlData
+ * @param {string} data
+ * @param {string} yamlData
  * @param {goog.dom.DomHelper} domHelper
  * @extends {goog.ui.Component}
  */
 jms.app.ErrorReporting = function(data, yamlData, domHelper) {
     goog.base(this, domHelper);
     
-    this.setModel(data);
+    this.setModel(goog.json.unsafeParse(data));
     
+    this.encodedData_ = data;
     this.yamlData_ = yamlData;
     this.handler_ = new goog.events.EventHandler(this);
     this.cookies_ = new goog.net.Cookies(domHelper.getDocument());
@@ -155,7 +156,7 @@ jms.app.ErrorReporting.prototype.sendReport = function() {
     this.showLoadingIcons_();
     
     var data = {};
-    data['error_data'] = goog.json.serialize(this.getModel());
+    data['error_data'] = this.encodedData_;
     
     var headers = {};
     headers['client_version'] = jms.app.ErrorReporting.CLIENT_VERSION;

@@ -29,8 +29,8 @@ goog.require('goog.dom');
 jms.app.ErrorReporting.instance_;
 
 /**
- * @param {!Object} data a json-encoded object
- * @param {!string} yamlData a yaml-encoded object
+ * @param {string} data a json-encoded object
+ * @param {string} yamlData a yaml-encoded object
  * @param {boolean} autoHelp
  */
 jms.app.ErrorReporting.install = function(data, yamlData, autoHelp) {
