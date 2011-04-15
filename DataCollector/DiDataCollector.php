@@ -16,6 +16,7 @@ class DiDataCollector extends DataCollector
     public function collect(Request $request, Response $response, \Exception $ex = null)
     {
         $this->data['debug'] = $this->container->getParameter('jms.debugging.debug');
+        $this->data['plovr_location'] = $this->container->getParameter('jms.debugging.plovr_location');
         $this->data['container_name'] = $name = $this->generateContainerName();
         $this->data['cache_dir'] = $this->container->getParameter('kernel.cache_dir');
     }
@@ -23,6 +24,11 @@ class DiDataCollector extends DataCollector
     public function isDebug()
     {
         return $this->data['debug'];
+    }
+    
+    public function getPlovrLocation()
+    {
+        return $this->data['plovr_location'];
     }
 
     public function getContainerName()

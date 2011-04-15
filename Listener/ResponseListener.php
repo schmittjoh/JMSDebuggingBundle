@@ -32,13 +32,15 @@ class ResponseListener
 {
     private $normalizer;
     private $profiler;
+    private $plovrLoc;
     private $debug;
     private $autoHelp;
 
-    public function __construct(NormalizerInterface $normalizer, Profiler $profiler, $debug = false, $autoHelp = false)
+    public function __construct(NormalizerInterface $normalizer, Profiler $profiler, $plovrLoc, $debug = false, $autoHelp = false)
     {
         $this->normalizer = $normalizer;
         $this->profiler = $profiler;
+        $this->plovrLoc = $plovrLoc;
         $this->debug = $debug;
         $this->autoHelp = $autoHelp;
     }
@@ -94,7 +96,7 @@ class ResponseListener
         $content = substr($content, 0, $pos)
             .(
                 $this->debug ?
-                    '<script language="javascript" src="http://localhost:9810/compile?id=error-reporting"></script>'
+                    '<script language="javascript" src="'.$this->plovrLoc.'?id=error-reporting"></script>'
                     :
                     '<script language="javascript">'.file_get_contents(__DIR__.'/../Resources/public/javascript/build/error-reporting.js').'</script>'
             )

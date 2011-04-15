@@ -92,7 +92,7 @@
     <div id="jms-dic-graph"></div>
 
     {% if collector.debug == true %}
-        <script language="javascript" type="text/javascript" src="http://localhost:9810/compile?id=dic-visualizer"></script>
+        <script language="javascript" type="text/javascript" src="{{ collector.plovrLocation }}?id=dic-visualizer"></script>
     {% else %}
         <script language="javascript" type="text/javascript" src="{{ asset("bundles/jmsdebugging/javascript/build/dic-visualizer.js") }}"></script>
     {% endif %}

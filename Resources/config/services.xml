@@ -23,6 +23,7 @@
         <service id="jms.debugging.response_listener" class="%jms.debugging.response_listener.class%" scope="request">
             <argument type="service" id="jms.debugging.normalizer" />
             <argument type="service" id="profiler" />
+            <argument>%jms.debugging.plovr_location%</argument>
             <argument>%jms.debugging.debug%</argument>
             <argument>%jms.debugging.auto_help%</argument>
             <tag name="kernel.listener" event="onCoreResponse" />

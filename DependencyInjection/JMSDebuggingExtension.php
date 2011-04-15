@@ -37,6 +37,7 @@ class JMSDebuggingExtension extends Extension
 
         $container->setParameter('jms.debugging.debug', $config['debug']);
         $container->setParameter('jms.debugging.auto_help', $config['auto_help']);
+        $container->setParameter('jms.debugging.plovr_location', $config['plovr_location']);
     }
 
     private function getConfigTree()
@@ -49,6 +50,8 @@ class JMSDebuggingExtension extends Extension
 
                     // this is only relevant if you want to modify the javascript files
                     ->booleanNode('debug')->defaultFalse()->end()
+
+                    ->scalarNode('plovr_location')->defaultValue('http://localhost:9810/compile')->end()
                 ->end()
             ->end()
             ->buildTree();
