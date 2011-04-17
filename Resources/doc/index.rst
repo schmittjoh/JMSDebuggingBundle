@@ -62,3 +62,15 @@ Below you find the default configuration for this bundle::
         # to click the "search" button manually each time.
         auto_help: false
 
+Support the Development
+=======================
+
+If you like this bundle, and want to support its development, you can donate
+whatever amount you like. You may also include an issue number in the note box
+if you want to link your donation directly to that issue. Note however that there
+is no guarantee when, or if that feature will be implemented.
+
+.. image:: https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/btn/btn_donate_SM.gif
+   :align: center
+   :target: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G8CSWPSTZFUDN
+
