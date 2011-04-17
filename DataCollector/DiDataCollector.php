@@ -2,8 +2,8 @@
 
 namespace JMS\DebuggingBundle\DataCollector;
 
+use JMS\DebuggingBundle\DependencyInjection\TraceableContainer;
 use Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass;
-
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +18,11 @@ class DiDataCollector extends DataCollector
         $this->data['debug'] = $this->container->getParameter('jms.debugging.debug');
         $this->data['container_name'] = $name = $this->generateContainerName();
         $this->data['cache_dir'] = $this->container->getParameter('kernel.cache_dir');
+        $this->data['log_messages'] = null;
+
+        if ($this->container instanceof TraceableContainer) {
+            $this->data['log_messages'] = $this->container->getLogMessages();
+        }
     }
 
     public function isDebug()
