@@ -41,10 +41,6 @@ class TraceableContainer extends Container
                     'id'     => $this->returnedServices->offsetGet($backTrace[1]['object']),
                     'method' => $backTrace[1]['function'],
                 );
-
-                if ($callee['id'] === 'service_container') {
-                    $callee['method'] = $backTrace[1]['function'];
-                }
             } else {
                 $callee = array(
                     'type'   => 'object',
