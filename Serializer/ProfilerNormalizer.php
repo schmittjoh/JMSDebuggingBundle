@@ -185,7 +185,7 @@ class ProfilerNormalizer extends AbstractNormalizer
             }
         }
 
-        return $data;
+        return array_values($data);
     }
 
     private function isNamespaceWhitelisted($namespace)
