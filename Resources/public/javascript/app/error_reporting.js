@@ -147,10 +147,15 @@ jms.app.ErrorReporting.prototype.sendFeedback = function(text) {
     goog.net.CrossDomainRpc.send(jms.app.ErrorReporting.FEEDBACK_URL, undefined, undefined, data, headers);
 };
 
-jms.app.ErrorReporting.prototype.sendReport = function() {
+/**
+ * @param {boolean=} opt_expandHelp
+ */
+jms.app.ErrorReporting.prototype.sendReport = function(opt_expandHelp) {
     if (null !== this.reportId_) {
         return;
     }
+    
+    var expandHelp = goog.isDef(opt_expandHelp) ? opt_expandHelp : true;
     
     this.getChild('resources').getChild('search-button').setEnabled(false);
     this.showLoadingIcons_();
@@ -161,16 +166,19 @@ jms.app.ErrorReporting.prototype.sendReport = function() {
     var headers = {};
     headers['client_version'] = jms.app.ErrorReporting.CLIENT_VERSION;
     
-    goog.net.CrossDomainRpc.send(jms.app.ErrorReporting.REPORT_URL, goog.bind(this.onSendComplete, this), undefined, data, headers);
+    goog.net.CrossDomainRpc.send(jms.app.ErrorReporting.REPORT_URL, goog.bind(this.onSendComplete, this, expandHelp), undefined, data, headers);
 };
 
 /**
+ * @param {boolean} expandHelp
  * @param {goog.events.Event} e
  */
-jms.app.ErrorReporting.prototype.onSendComplete = function(e) {
+jms.app.ErrorReporting.prototype.onSendComplete = function(expandHelp, e) {
     this.hideLoadingIcons_();
     
-    this.getChild('resources').getZippy().setExpanded(true);
+    if (expandHelp) {
+    	this.getChild('resources').getZippy().setExpanded(true);
+    }
     
     // handle errors
     if (200 !== e.target.status || false === e.target.responseTextIsJson_) {

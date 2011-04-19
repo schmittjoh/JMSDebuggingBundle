@@ -42,7 +42,7 @@ jms.app.ErrorReporting.install = function(data, yamlData, autoHelp) {
     jms.app.ErrorReporting.instance_ = app;
     
     if (autoHelp) {
-        app.sendReport();
+        app.sendReport(false);
     }
 };
 
