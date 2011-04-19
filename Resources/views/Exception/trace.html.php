@@ -6,11 +6,7 @@
 ?>
 <?php if (!empty($trace['function'])): ?>
     at
-    <strong>
-        <abbr title="<?php echo htmlspecialchars($trace['class'], ENT_QUOTES, 'UTF-8') ?>"><?php echo $trace['short_class'] ?></abbr>
-        <?php echo $trace['type'].$trace['function'] ?>
-    </strong>
-    <?php echo $codeHelper->formatArgs($trace['args']) ?>
+    <strong><abbr title="<?php echo htmlspecialchars($trace['class'], ENT_QUOTES, 'UTF-8') ?>"><?php echo $trace['short_class'] ?></abbr><?php echo $trace['type'].$trace['function'] ?>(</strong><?php echo $codeHelper->formatArgs($trace['args']) ?><strong>)</strong>
     <br />
 <?php endif ?>
 
