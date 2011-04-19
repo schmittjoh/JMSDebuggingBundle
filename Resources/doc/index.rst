@@ -51,6 +51,27 @@ Add DebuggingBundle to your application kernel
         );
     }
 
+Change the base class of your dependency injection container
+------------------------------------------------------------
+
+If you want to have extended debugging capabilities like which services were 
+loaded in which order from which class/service, then you need to change the 
+default container base class. This will have a slight runtime performance hit in
+the range of about 10-30 micro seconds per service call (only in dev environment!).
+
+::
+
+    // app/AppKernel.php
+    
+    protected function getContainerBaseClass()
+    {
+        if ($this->isDebug()) {
+            return '\JMS\DebuggingBundle\DependencyInjection\TraceableContainer';
+        }
+
+        return parent::getContainerBaseClass();
+    }
+
 Configuration
 =============
 
@@ -61,4 +82,16 @@ Below you find the default configuration for this bundle::
         # messages for public exceptions. If you leave this set to false, you have
         # to click the "search" button manually each time.
         auto_help: false
+
+Support the Development
+=======================
+
+If you like this bundle, and want to support its development, you can donate
+whatever amount you like. You may also include an issue number in the note box
+if you want to link your donation directly to that issue. Note however that there
+is no guarantee when, or if that feature will be implemented.
+
+.. image:: https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/btn/btn_donate_SM.gif
+   :align: center
+   :target: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G8CSWPSTZFUDN
 
