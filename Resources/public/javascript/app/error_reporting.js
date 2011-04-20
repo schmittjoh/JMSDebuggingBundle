@@ -209,6 +209,34 @@ jms.app.ErrorReporting.prototype.onSendComplete = function(expandHelp, e) {
     var data = goog.json.parse(e.target.responseText);
     this.reportId_ = data['id'];
     
+    // check if this is a rich-client solution
+    if ('rich_client_js' in data) {
+        this.renderRichClientHelp_(data['rich_client_js']);
+        return;
+    }
+    
+    this.renderStandardHelpResources_(data);
+};
+
+/**
+ * @private
+ * @param {string} jsUrl
+ */
+jms.app.ErrorReporting.prototype.renderRichClientHelp_ = function(jsUrl) {
+	var dom = this.getDomHelper();
+	var script = dom.createDom('script', {
+		'src': jsUrl,
+		'type': 'text/javascript',
+		'language': 'javascript'
+	});
+	dom.getDocument().body.appendChild(script);
+};
+
+/**
+ * @private
+ * @param {!Object} data
+ */
+jms.app.ErrorReporting.prototype.renderStandardHelpResources_ = function(data) {
     // convert data to local format (this is necessary because the sending, and
     // the receiving script cannot be compiled using the same mapping files when
     // compiling with plovr, we would have to use GCC directly for that)
@@ -221,16 +249,23 @@ jms.app.ErrorReporting.prototype.onSendComplete = function(expandHelp, e) {
             id: data['resources'][i]['id']
         };
     }
-    
+
     // generate template
     this.getChild('resources').getChild('counter').setResourceCount(c);
     soy.renderElement(
-        this.getDomHelper().getElement('jms-ui-help-resources'),
+        this.getHelpContentElement(),
         jms.templates.help_resources.list, 
         {
             resources: convertedData
         }
     );
+};
+
+/**
+ * @return {Element}
+ */
+jms.app.ErrorReporting.prototype.getHelpContentElement = function() {
+	return this.getDomHelper().getElement('jms-ui-help-resources');
 };
 
 /**

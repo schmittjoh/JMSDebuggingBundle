@@ -54,5 +54,16 @@ jms.app.ErrorReporting.resourceMouseDownCallback = function(elem, resourceId) {
     jms.app.ErrorReporting.instance_.onResourceMouseDown(elem, resourceId);
 };
 
+/**
+ * @return {!jms.app.ErrorReporting}
+ */
+jms.app.ErrorReporting.getApp = function() {
+	return jms.app.ErrorReporting.instance_;
+};
+
+// api
 goog.exportSymbol('jms_install_error_reporting', jms.app.ErrorReporting.install);
 goog.exportSymbol('jms_url', jms.app.ErrorReporting.resourceMouseDownCallback);
+goog.exportSymbol('jms_get_app', jms.app.ErrorReporting.getApp);
+goog.exportProperty(jms.app.ErrorReporting.prototype, 'getHelpContentElement', jms.app.ErrorReporting.prototype.getHelpContentElement);
+goog.exportProperty(jms.app.ErrorReporting.prototype, 'getDomHelper', jms.app.ErrorReporting.prototype.getDomHelper);

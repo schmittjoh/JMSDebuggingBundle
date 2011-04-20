@@ -7,7 +7,7 @@
             
       "define": {
     	  "goog.DEBUG": false,
-    	  "jms.app.ErrorReporting.CLIENT_VERSION": "PR1"
+    	  "jms.app.ErrorReporting.CLIENT_VERSION": "PR2"
       },
       
       "type-prefixes-to-strip": ["goog.debug", "goog.asserts", "goog.assert"],

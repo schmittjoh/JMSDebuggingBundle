@@ -6,7 +6,7 @@
       "inputs": "@JMSDebuggingBundle/Resources/public/javascript/error_reporting_init.js",
       
       "define": {
-    	  "jms.app.ErrorReporting.CLIENT_VERSION": "PR1"
+    	  "jms.app.ErrorReporting.CLIENT_VERSION": "PR2"
       },
       
       "pretty-print": true,
