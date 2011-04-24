@@ -25,11 +25,11 @@
                     <strong>500</strong> Internal Server Error - <?php echo $codeHelper->abbrClass($exception->getClass()) ?>
                 </div>
 
-                <?php $previousCount = count($exception->getPreviouses()) ?>
+                <?php $previousCount = count($exception->getAllPrevious()) ?>
                 <?php if ($previousCount > 0): ?>
                     <div class="linked"><span><strong><?php echo $previousCount ?></strong> linked Exception<?php if ($previousCount > 1): ?>s<?php endif ?>:</span>
                         <ul>
-                            <?php foreach ($exception->getPreviouses() as $i => $previous): ?>
+                            <?php foreach ($exception->getAllPrevious() as $i => $previous): ?>
                                 <li>
                                     <?php echo $codeHelper->abbrClass($previous->getClass()) ?> <a href="#traces_link_<?php echo $i + 1 ?>" onclick="toggle('traces_<?php echo $i + 1 ?>', 'traces');">&raquo;</a>
                                 </li>
