@@ -68,9 +68,7 @@ class ProfilerNormalizer extends AbstractNormalizer
 
     public function supportsDenormalization($data, $type, $format = null)
     {
-        $class = new \ReflectionClass($type);
-
-        return 'Symfony\\Component\\HttpKernel\\Profiler\\Profiler' === $class->getName() || $class->isSubclassOf('Symfony\\Component\\HttpKernel\\Profiler\\Profiler');
+        return false;
     }
 
     private function getEventData(EventDataCollector $collector)
