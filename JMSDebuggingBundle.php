@@ -22,6 +22,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use JMS\DebuggingBundle\Kernel\ExceptionHandler;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use JMS\DebuggingBundle\DependencyInjection\Compiler\ContainerBuilderDebugDumpPass;
 
 class JMSDebuggingBundle extends Bundle
 {
@@ -34,5 +36,12 @@ class JMSDebuggingBundle extends Bundle
             $this->exceptionHandler = new ExceptionHandler($kernel);
             $this->exceptionHandler->register();
         }
+    }
+
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new ContainerBuilderDebugDumpPass(), PassConfig::TYPE_BEFORE_REMOVING);
     }
 }
