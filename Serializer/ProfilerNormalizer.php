@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector;
 use Symfony\Component\HttpKernel\Exception\FlattenException;
 use Symfony\Component\HttpKernel\DataCollector\ExceptionDataCollector;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 class ProfilerNormalizer extends AbstractNormalizer
 {
@@ -60,9 +61,14 @@ class ProfilerNormalizer extends AbstractNormalizer
         throw new \RuntimeException('denormalize() is currently not implemented');
     }
 
-    public function supports(\ReflectionClass $class, $format = null)
+    function supportsNormalization($data, $format = null)
     {
-        return 'Symfony\Component\HttpKernel\Profiler\Profiler' === $class->getName() || $class->isSubclassOf('Symfony\Component\HttpKernel\Profiler\Profiler');
+        return $data instanceof Profiler;
+    }
+
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        return false;
     }
 
     private function getEventData(EventDataCollector $collector)
