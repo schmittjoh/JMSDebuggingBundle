@@ -16,7 +16,7 @@ class DiDataCollector extends DataCollector
     public function collect(Request $request, Response $response, \Exception $ex = null)
     {
         $this->data['debug'] = $this->container->getParameter('jms.debugging.debug');
-        $this->data['container_name'] = $name = $this->generateContainerName();
+        $this->data['container_name'] = $name = $this->container->getParameter('kernel.container_class');
         $this->data['cache_dir'] = $this->container->getParameter('kernel.cache_dir');
         $this->data['log_messages'] = null;
 
@@ -105,12 +105,5 @@ class DiDataCollector extends DataCollector
     public function getName()
     {
         return 'dependency_injection';
-    }
-
-    private function generateContainerName()
-    {
-        $c = $this->container;
-
-        return $c->getParameter('kernel.name').ucfirst($c->getParameter('kernel.environment')).($c->getParameter('kernel.debug')?'Debug':'').'ProjectContainer';
     }
 }
