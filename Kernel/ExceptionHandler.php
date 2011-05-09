@@ -18,7 +18,6 @@
 
 namespace JMS\DebuggingBundle\Kernel;
 
-use JMS\DebuggingBundle\Listener\ExceptionFilter;
 use JMS\DebuggingBundle\Listener\ResponseListener;
 use JMS\DebuggingBundle\Serializer\ProfilerNormalizer;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper;
