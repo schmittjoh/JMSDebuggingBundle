@@ -61,7 +61,7 @@ class ResponseListener
         }
 
         // check if there are any "public" exceptions
-        $data = $this->normalizer->normalize($this->profiler, $this->getRequest()->getRequestFormat());
+        $data = $this->normalizer->normalize($this->profiler);
         if (!$data['exception']) {
             return;
         }
