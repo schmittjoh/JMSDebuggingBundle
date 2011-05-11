@@ -24,10 +24,10 @@ use Symfony\Component\HttpKernel\DataCollector\LoggerDataCollector;
 use Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector;
 use Symfony\Component\HttpKernel\Exception\FlattenException;
 use Symfony\Component\HttpKernel\DataCollector\ExceptionDataCollector;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
-class ProfilerNormalizer extends AbstractNormalizer
+class ProfilerNormalizer extends SerializerAwareNormalizer
 {
     private $kernel;
 
@@ -36,9 +36,9 @@ class ProfilerNormalizer extends AbstractNormalizer
         $this->kernel = $kernel;
     }
 
-    public function normalize($profiler, $format = null, $properties = null)
+    public function normalize($profiler, $format = null)
     {
-        if (!$this->supports(new \ReflectionClass($profiler), $format)) {
+        if (!$this->supportsNormalization($profiler, $format)) {
             throw new \InvalidArgumentException(sprintf('$profiler, and/or $format are not supported.'));
         }
 
