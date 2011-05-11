@@ -61,7 +61,7 @@ class ProfilerNormalizer extends SerializerAwareNormalizer
         throw new \RuntimeException('denormalize() is currently not implemented');
     }
 
-    function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null)
     {
         return $data instanceof Profiler;
     }
