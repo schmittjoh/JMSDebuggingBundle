@@ -18,6 +18,7 @@
 
 namespace JMS\DebuggingBundle\Listener;
 
+use JMS\DebuggingBundle\Problem\RemoteProblemSolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -30,17 +31,17 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
  */
 class ResponseListener
 {
-    private $normalizer;
     private $profiler;
-    private $debug;
-    private $autoHelp;
+    private $problemSolvers;
+    private $applied = false;
 
     public function __construct(NormalizerInterface $normalizer, Profiler $profiler, $debug = false, $autoHelp = false)
     {
-        $this->normalizer = $normalizer;
         $this->profiler = $profiler;
-        $this->debug = $debug;
-        $this->autoHelp = $autoHelp;
+
+        $this->problemSolvers = array(
+            new RemoteProblemSolver($normalizer, $profiler, $debug, $autoHelp),
+        );
     }
 
     public function onCoreResponse(FilterResponseEvent $event)
@@ -55,52 +56,25 @@ class ResponseListener
             return;
         }
 
-        // already rendered
-        if (false !== strpos($content, '<script language="javascript">jms_install_error_reporting')) {
-            return;
-        }
-
-        // check if there are any "public" exceptions
-        $data = $this->normalizer->normalize($this->profiler, null);
-        if (!$data['exception']) {
-            return;
-        }
-
-        // insert css
-        if (false === $pos = strpos($content, '</head>')) {
-            return;
-        }
-        $content = substr($content, 0, $pos).'<style type="text/css">'.file_get_contents(__DIR__.'/../Resources/public/css/error_reporting.css').'</style>'.substr($content, $pos);
-
-        // insert javascript
-        if (false === $pos = strpos($content, '</body>')) {
-            return;
-        }
-
-        $stringData = '';
-        foreach ($data as $k => $subData) {
-            $level = 2;
-
-            if ('exception' === $k) {
-                $level = 4;
-            } else if ('events' === $k) {
-                $level = 3;
+        // check for solution
+        $solution = null;
+        foreach ($this->problemSolvers as $problemSolver) {
+            if (null !== $solution = $problemSolver->solve($request, $exception)) {
+                break;
             }
-
-            $stringData .= "\n".Yaml::dump(array($k => $subData), $level);
         }
-        $stringData = preg_replace('/\bXXX\b/', '<span class="anonymous">XXX</span>', htmlspecialchars($stringData, ENT_QUOTES, 'UTF-8'));
 
-        $content = substr($content, 0, $pos)
-            .(
-                $this->debug ?
-                    '<script language="javascript" src="http://localhost:9810/compile?id=error-reporting"></script>'
-                    :
-                    '<script language="javascript">'.file_get_contents(__DIR__.'/../Resources/public/javascript/build/error-reporting.js').'</script>'
-            )
-            .'<script language="javascript">jms_install_error_reporting('.json_encode(json_encode($data)).', '.json_encode(trim($stringData)).', '.json_encode($this->autoHelp).');</script>'
-            .substr($content, $pos);
+        // check if solution found
+        if (null === $solution) {
+            return;
+        }
 
-        $response->setContent($content);
+        // check if already applied
+        if ($this->applied) {
+            return;
+        }
+        $this->applied = true;
+
+        $solution->apply($response);
     }
 }
