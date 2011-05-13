@@ -46,7 +46,7 @@ class ResponseListener
 
     public function onCoreResponse(FilterResponseEvent $event)
     {
-        $exceptionCollector = $this->profiler->get('exception');
+        $exceptionCollector = $this->profiler->get('real_exception');
         if (!$exceptionCollector->hasException()) {
             return;
         }
@@ -59,7 +59,7 @@ class ResponseListener
         // check for solution
         $solution = null;
         foreach ($this->problemSolvers as $problemSolver) {
-            if (null !== $solution = $problemSolver->solve($request, $exception)) {
+            if (null !== $solution = $problemSolver->solve($event->getRequest(), $exceptionCollector->getException())) {
                 break;
             }
         }

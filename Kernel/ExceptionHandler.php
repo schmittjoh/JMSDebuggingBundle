@@ -18,6 +18,8 @@
 
 namespace JMS\DebuggingBundle\Kernel;
 
+use JMS\DebuggingBundle\DataCollector\RealExceptionDataCollector;
+
 use JMS\DebuggingBundle\Listener\ResponseListener;
 use JMS\DebuggingBundle\Serializer\ProfilerNormalizer;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper;
@@ -53,23 +55,27 @@ class ExceptionHandler
 
     public function handle(\Exception $exception)
     {
-        $request = $this->getRequest($exception);
+        try {
+            $request = $this->getRequest($exception);
 
-        $origException = $exception;
-        $exception = FlattenException::create($exception);
+            $origException = $exception;
+            $exception = FlattenException::create($exception);
 
-        $codeHelper = new CodeHelper(null, $this->kernel->getRootDir());
-        $title    = $exception->getMessage().' (500 Internal Server Error)';
-        $template = 'Exception/exception.html.php';
+            $codeHelper = new CodeHelper(null, $this->kernel->getRootDir());
+            $title    = $exception->getMessage().' (500 Internal Server Error)';
+            $template = 'Exception/exception.html.php';
 
-        ob_start();
-        include __DIR__.'/../Resources/views/layout.html.php';
-        $content = ob_get_contents();
-        ob_end_clean();
+            ob_start();
+            include __DIR__.'/../Resources/views/layout.html.php';
+            $content = ob_get_contents();
+            ob_end_clean();
 
-        $event = new FilterResponseEvent(new NullHttpKernel(), $request, HttpKernelInterface::MASTER_REQUEST, new Response($content, 500));
-        $this->filterResponse($event, $origException);
-        $event->getResponse()->send();
+            $event = new FilterResponseEvent(new NullHttpKernel(), $request, HttpKernelInterface::MASTER_REQUEST, new Response($content, 500));
+            $this->filterResponse($event, $origException);
+            $event->getResponse()->send();
+        } catch (\Exception $ex) {
+            echo "Exception while handling exception: ".$ex->getMessage();
+        }
     }
 
     /**
@@ -101,6 +107,7 @@ class ExceptionHandler
         $profiler = new Profiler(new NullProfilerStorage());
         $profiler->add(new ConfigDataCollector($this->kernel));
         $profiler->add(new ExceptionDataCollector());
+        $profiler->add(new RealExceptionDataCollector());
         $profiler->collect($event->getRequest(), $event->getResponse(), $ex);
 
         $normalizer = new ProfilerNormalizer($this->kernel);

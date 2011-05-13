@@ -12,13 +12,17 @@
         <parameter key="jms.debugging.encoder.class">Symfony\Component\Serializer\Encoder\JsonEncoder</parameter>
         
         <parameter key="jms.debugging.di_collector.class">JMS\DebuggingBundle\DataCollector\DiDataCollector</parameter>
+        <parameter key="jms.debugging.exception_collector.class">JMS\DebuggingBundle\DataCollector\RealExceptionDataCollector</parameter>
     </parameters>
 
     <services>
         <service id="jms.debugging.di_collector" class="%jms.debugging.di_collector.class%" public="false">
             <property name="container" type="service" id="service_container" />
             <tag name="data_collector" template="JMSDebuggingBundle:Collector:container" id="dependency_injection" />
-        </service>        
+        </service>
+        <service id="jms.debugging.exception_collector" class="%jms.debugging.exception_collector.class%" public="false">
+            <tag name="data_collector" />
+        </service>
       
         <service id="jms.debugging.response_listener" class="%jms.debugging.response_listener.class%" scope="request">
             <argument type="service" id="jms.debugging.normalizer" />
