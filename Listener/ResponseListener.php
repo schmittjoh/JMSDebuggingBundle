@@ -18,6 +18,8 @@
 
 namespace JMS\DebuggingBundle\Listener;
 
+use JMS\DebuggingBundle\Problem\AuthenticationCredentialsNotFoundSolver;
+
 use JMS\DebuggingBundle\Problem\RemoteProblemSolver;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -40,6 +42,7 @@ class ResponseListener
         $this->profiler = $profiler;
 
         $this->problemSolvers = array(
+            new AuthenticationCredentialsNotFoundSolver(),
             new RemoteProblemSolver($normalizer, $profiler, $debug, $autoHelp),
         );
     }

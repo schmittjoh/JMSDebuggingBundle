@@ -1,0 +1,1 @@
+You have configured no firewall for URI "<strong><?php echo $request->getPathInfo() ?></strong>".
