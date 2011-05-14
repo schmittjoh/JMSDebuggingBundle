@@ -16,20 +16,23 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RemoteProblemSolver implements ProblemSolverInterface
 {
-    private $data;
+    private $normalizer;
+    private $profiler;
     private $debug;
     private $autoHelp;
 
     public function __construct(NormalizerInterface $profilerNormalizer, Profiler $profiler, $debug, $autoHelp)
     {
-        $this->data = $profilerNormalizer->normalize($profiler);
+        $this->normalizer = $profilerNormalizer;
+        $this->profiler = $profiler;
         $this->debug = $debug;
         $this->autoHelp = $autoHelp;
     }
 
     public function solve(Request $request, \Exception $exception)
     {
-        if (!$this->data['exception']) {
+        $data = $this->normalizer->normalize($this->profiler);
+        if (!$data['exception']) {
             return null;
         }
 
@@ -38,7 +41,7 @@ class RemoteProblemSolver implements ProblemSolverInterface
         $css .= "\n</style>";
 
         $stringData = '';
-        foreach ($this->data as $k => $subData) {
+        foreach ($data as $k => $subData) {
             $level = 2;
 
             if ('exception' === $k) {
@@ -55,7 +58,7 @@ class RemoteProblemSolver implements ProblemSolverInterface
               '<script language="javascript" src="http://localhost:9810/compile?id=error-reporting"></script>'
               :
               '<script language="javascript">'.file_get_contents(__DIR__.'/../Resources/public/javascript/build/error-reporting.js').'</script>';
-        $js .= '<script language="javascript">jms_install_error_reporting('.json_encode(json_encode($this->data)).', '.json_encode(trim($stringData)).', '.json_encode($this->autoHelp).');</script>';
+        $js .= '<script language="javascript">jms_install_error_reporting('.json_encode(json_encode($data)).', '.json_encode(trim($stringData)).', '.json_encode($this->autoHelp).');</script>';
 
         return new RichClientSolution($js, $css);
     }
