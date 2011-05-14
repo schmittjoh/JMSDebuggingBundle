@@ -18,6 +18,8 @@
 
 namespace JMS\DebuggingBundle\Serializer;
 
+use JMS\DebuggingBundle\Exception\InvalidArgumentException;
+use JMS\DebuggingBundle\Exception\RuntimeException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\DataCollector\EventDataCollector;
 use Symfony\Component\HttpKernel\DataCollector\LoggerDataCollector;
@@ -39,7 +41,7 @@ class ProfilerNormalizer extends SerializerAwareNormalizer
     public function normalize($profiler, $format = null)
     {
         if (!$this->supportsNormalization($profiler, $format)) {
-            throw new \InvalidArgumentException(sprintf('$profiler, and/or $format are not supported.'));
+            throw new InvalidArgumentException(sprintf('$profiler, and/or $format are not supported.'));
         }
 
         $data = array();
@@ -58,7 +60,7 @@ class ProfilerNormalizer extends SerializerAwareNormalizer
 
     public function denormalize($data, $class, $format = null)
     {
-        throw new \RuntimeException('denormalize() is currently not implemented');
+        throw new RuntimeException('denormalize() is currently not implemented');
     }
 
     public function supportsNormalization($data, $format = null)

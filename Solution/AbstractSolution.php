@@ -8,6 +8,7 @@ namespace JMS\DebuggingBundle\Solution;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
+use JMS\DebuggingBundle\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractSolution implements SolutionInterface
@@ -29,7 +30,7 @@ abstract class AbstractSolution implements SolutionInterface
     {
         $path = __DIR__.'/../Resources/views/'.str_replace(':', '/', $name);
         if (!file_exists($path)) {
-            throw new \InvalidArgumentException(sprintf('There is no template at "%s".', $path));
+            throw new InvalidArgumentException(sprintf('There is no template at "%s".', $path));
         }
 
         extract($vars, EXTR_SKIP);
