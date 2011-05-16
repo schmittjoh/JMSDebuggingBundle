@@ -18,7 +18,7 @@ class ObjectFinder
     private $className;
     private $container;
 
-    public function find($className)
+    public function find($className, \Exception $ex = null)
     {
         if (!class_exists($className, false)) {
             throw new ClassNotLoadedException($className);
@@ -28,6 +28,12 @@ class ObjectFinder
         $this->container = null;
 
         $trace = debug_backtrace(true);
+        if (null !== $ex) {
+            do {
+                $trace = array_merge($trace, $ex->getTrace());
+            } while (null !== $ex = $ex->getPrevious());
+        }
+
         for ($i=0, $c=count($trace); $i<$c; $i++) {
             if (!empty($trace[$i]['object'])) {
                 if ($trace[$i]['object'] instanceof $className) {

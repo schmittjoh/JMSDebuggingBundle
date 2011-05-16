@@ -18,8 +18,8 @@
 
 namespace JMS\DebuggingBundle\Kernel;
 
+use JMS\DebuggingBundle\Util\ObjectFinder;
 use JMS\DebuggingBundle\DataCollector\RealExceptionDataCollector;
-
 use JMS\DebuggingBundle\Listener\ResponseListener;
 use JMS\DebuggingBundle\Serializer\ProfilerNormalizer;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper;
@@ -42,10 +42,12 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 class ExceptionHandler
 {
     private $kernel;
+    private $finder;
 
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
+        $this->finder = new ObjectFinder();
     }
 
     public function register()
@@ -56,7 +58,7 @@ class ExceptionHandler
     public function handle(\Exception $exception)
     {
         try {
-            $request = $this->getRequest($exception);
+            $request = $this->finder->find('Symfony\Component\HttpFoundation\Request', $exception);
 
             $origException = $exception;
             $exception = FlattenException::create($exception);
@@ -76,30 +78,6 @@ class ExceptionHandler
         } catch (\Exception $ex) {
             echo "Exception while handling exception: ".$ex->getMessage();
         }
-    }
-
-    /**
-     * Gets the request object from the trace
-     *
-     * @param \Exception $ex
-     * @return Request
-     */
-    private function getRequest(\Exception $ex)
-    {
-        $trace = $ex->getTrace();
-        $request = null;
-        for ($i=count($trace)-1; $i>=0; $i--) {
-            if (!isset($trace[$i]['args'][0]) || !is_object($trace[$i]['args'][0])) {
-                continue;
-            }
-
-            if ($trace[$i]['args'][0] instanceof Request) {
-                $request = $trace[$i]['args'][0];
-                break;
-            }
-        }
-
-        return $request;
     }
 
     private function filterResponse(FilterResponseEvent $event, \Exception $ex)

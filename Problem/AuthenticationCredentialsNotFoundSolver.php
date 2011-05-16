@@ -25,7 +25,7 @@ class AuthenticationCredentialsNotFoundSolver implements ProblemSolverInterface
         }
 
         try {
-            $firewall = $this->objectFinder->find($fClass = 'Symfony\Component\Security\Http\Firewall');
+            $firewall = $this->objectFinder->find($fClass = 'Symfony\Component\Security\Http\Firewall', $ex);
             $ref = new \ReflectionProperty($fClass, 'map');
             $ref->setAccessible(true);
             $map = $ref->getValue($firewall);
