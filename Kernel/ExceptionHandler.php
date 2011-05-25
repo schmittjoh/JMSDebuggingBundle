@@ -20,6 +20,7 @@ namespace JMS\DebuggingBundle\Kernel;
 
 use JMS\DebuggingBundle\Util\ObjectFinder;
 use JMS\DebuggingBundle\DataCollector\RealExceptionDataCollector;
+use JMS\DebuggingBundle\Exception\RuntimeException;
 use JMS\DebuggingBundle\Listener\ResponseListener;
 use JMS\DebuggingBundle\Serializer\ProfilerNormalizer;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper;
@@ -58,7 +59,11 @@ class ExceptionHandler
     public function handle(\Exception $exception)
     {
         try {
-            $request = $this->finder->find('Symfony\Component\HttpFoundation\Request', $exception);
+            try {
+                $request = $this->finder->find('Symfony\Component\HttpFoundation\Request', $exception);
+            } catch (RuntimeException $requestRetrievalFailed) {
+                $request = Request::createFromGlobals();
+            }
 
             $origException = $exception;
             $exception = FlattenException::create($exception);
