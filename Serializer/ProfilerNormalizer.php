@@ -196,14 +196,17 @@ class ProfilerNormalizer extends SerializerAwareNormalizer
         return array_values($data);
     }
 
-    private function isNamespaceWhitelisted($namespace)
+    private function isNamespaceWhitelisted($class)
     {
-        return 0 === strpos($namespace, 'Symfony\\')
-               || 0 === strpos($namespace, 'JMS\\SecurityExtraBundle\\')
-               || 0 === strpos($namespace, 'Sensio\\Bundle\\FrameworkExtraBundle\\')
-               || 0 === strpos($namespace, 'Assetic\\')
-               || 0 === strpos($namespace, 'Doctrine\\')
-               || 0 === strpos($namespace, 'Zend\\')
+        return 0 === strpos($class, 'Symfony\\')
+               || 0 === strpos($class, 'JMS\\SecurityExtraBundle\\')
+               || 0 === strpos($class, 'Sensio\\Bundle\\FrameworkExtraBundle\\')
+               || 0 === strpos($class, 'Assetic\\')
+               || 0 === strpos($class, 'Doctrine\\')
+               || 0 === strpos($class, 'Monolog\\')
+               || 0 === strpos($class, 'Metadata\\')
+               || 0 === strpos($class, 'Twig_')
+               || 0 === strpos($class, 'Swift_')
         ;
     }
 
