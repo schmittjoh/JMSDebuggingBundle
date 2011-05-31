@@ -19,6 +19,7 @@
 namespace JMS\DebuggingBundle\Kernel;
 
 use Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class NullProfilerStorage implements ProfilerStorageInterface
 {
@@ -37,7 +38,7 @@ class NullProfilerStorage implements ProfilerStorageInterface
         return '';
     }
 
-    public function write($token, $parent, $data, $ip, $url, $time)
+    public function write(Profile $profile)
     {
         return true;
     }
