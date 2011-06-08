@@ -48,7 +48,7 @@ Add DebuggingBundle to your application kernel
             // ...
             $bundles[] = new JMS\DebuggingBundle\JMSDebuggingBundle($this);
             // ...
-        );
+        }
     }
 
 Change the base class of your dependency injection container
