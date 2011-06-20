@@ -49,7 +49,7 @@ class ObjectFinder
                 }
             }
 
-            if (null !== $obj = $this->scanArgs($trace[$i]['args'])) {
+            if (isset($trace[$i]['args']) && null !== $obj = $this->scanArgs($trace[$i]['args'])) {
                 return $obj;
             }
         }
