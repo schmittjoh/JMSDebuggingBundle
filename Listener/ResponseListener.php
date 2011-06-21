@@ -48,7 +48,7 @@ class ResponseListener
         );
     }
 
-    public function onCoreResponse(FilterResponseEvent $event)
+    public function onKernelResponse(FilterResponseEvent $event)
     {
         $exceptionCollector = $this->profiler->get('real_exception');
         if (!$exceptionCollector->hasException()) {

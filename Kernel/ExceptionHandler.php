@@ -95,6 +95,6 @@ class ExceptionHandler
 
         $normalizer = new ProfilerNormalizer($this->kernel);
         $listener = new ResponseListener($normalizer, $profiler);
-        $listener->onCoreResponse($event);
+        $listener->onKernelResponse($event);
     }
 }
