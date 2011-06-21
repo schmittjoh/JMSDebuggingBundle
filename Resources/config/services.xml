@@ -29,7 +29,7 @@
             <argument type="service" id="profiler" />
             <argument>%jms.debugging.debug%</argument>
             <argument>%jms.debugging.auto_help%</argument>
-            <tag name="kernel.listener" event="core.response" method="onCoreResponse" />
+            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
         </service>
 
         <service id="jms.debugging.normalizer" class="%jms.debugging.normalizer.class%" public="false">
