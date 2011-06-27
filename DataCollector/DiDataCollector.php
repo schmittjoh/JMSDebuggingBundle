@@ -3,6 +3,7 @@
 namespace JMS\DebuggingBundle\DataCollector;
 
 use JMS\DebuggingBundle\DependencyInjection\TraceableContainer;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,11 @@ class DiDataCollector extends DataCollector
 {
     private $container;
     private $containerBuilder;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     public function collect(Request $request, Response $response, \Exception $ex = null)
     {
