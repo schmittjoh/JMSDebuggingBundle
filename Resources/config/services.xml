@@ -17,7 +17,7 @@
 
     <services>
         <service id="jms.debugging.di_collector" class="%jms.debugging.di_collector.class%" public="false">
-            <property name="container" type="service" id="service_container" />
+            <argument type="service" id="service_container" />
             <tag name="data_collector" template="JMSDebuggingBundle:Collector:container" id="dependency_injection" />
         </service>
         <service id="jms.debugging.exception_collector" class="%jms.debugging.exception_collector.class%" public="false">
