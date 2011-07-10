@@ -31,20 +31,20 @@
         .jms-dic-searchinput {
             float: left;
         }
-        
+
         .jms-ui-choice-field {
             float: left;
             margin-left: 10px;
         }
-        
+
         .jms-ui-choice-field > span {
             float: left;
         }
-        
+
         .jms-ui-choice-field-choice {
             margin-left: 5px;
         }
-        
+
         .jms-ui-directed-graph {
             clear: both;
             float: left;
@@ -61,7 +61,7 @@
             padding:5px;
             font-size:12px;
         }
-        
+
         .jms-ui-node.goog-control-focused {
             border:2px solid #000;
         }
@@ -69,14 +69,14 @@
         .jms-ui-node-highlight {
             background-color: #fffeee;
         }
-        
+
         .jms-ui-service-node-private {
             border-style: dashed;
         }
         .jms-ui-service-node-private.goog-control-focused {
             border-style: dashed;
         }
-        
+
         .jms-ui-service-node-alias {
             border-style: dotted;
         }
@@ -94,7 +94,7 @@
     {% if collector.debug == true %}
         <script language="javascript" type="text/javascript" src="http://localhost:9810/compile?id=dic-visualizer"></script>
     {% else %}
-        <script language="javascript" type="text/javascript" src="{{ asset("bundles/jmsdebugging/javascript/build/dic-visualizer.js") }}"></script>
+        <script language="javascript" type="text/javascript" src="{{ asset("bundles/jmsdebugging/javascript/dic-visualizer.js") }}"></script>
     {% endif %}
 
     <script language="javascript" type="text/javascript">

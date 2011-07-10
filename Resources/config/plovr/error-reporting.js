@@ -1,9 +1,9 @@
 {
       "id": "error-reporting",
-      "paths": ["@JMSDebuggingBundle/Resources/public/javascript/"],
+      "paths": ["@JMSDebuggingBundle/Resources/public/javascript/", "%kernel.root_dir%/src-js/"],
       "mode": "ADVANCED",
       "level": "VERBOSE",
-      "inputs": "@JMSDebuggingBundle/Resources/public/javascript/error_reporting_init.js",
+      "inputs": "@JMSDebuggingBundle/Resources/js/error_reporting_init.js",
       
       "define": {
     	  "jms.app.ErrorReporting.CLIENT_VERSION": "PR2"

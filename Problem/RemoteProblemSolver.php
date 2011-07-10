@@ -57,7 +57,7 @@ class RemoteProblemSolver implements ProblemSolverInterface
         $js = $this->debug ?
               '<script language="javascript" src="http://localhost:9810/compile?id=error-reporting"></script>'
               :
-              '<script language="javascript">'.file_get_contents(__DIR__.'/../Resources/public/javascript/build/error-reporting.js').'</script>';
+              '<script language="javascript">'.file_get_contents(__DIR__.'/../Resources/public/javascript/error-reporting.js').'</script>';
         $js .= '<script language="javascript">jms_install_error_reporting('.json_encode(json_encode($data)).', '.json_encode(trim($stringData)).', '.json_encode($this->autoHelp).');</script>';
 
         return new RichClientSolution($js, $css);
