@@ -91,7 +91,7 @@
 
     <div id="jms-dic-graph"></div>
 
-    {% if collector.debug == true %}
+    {% if app.request.query.has("jms_debug") %}
         <script language="javascript" type="text/javascript" src="http://localhost:9810/compile?id=dic-visualizer"></script>
     {% else %}
         <script language="javascript" type="text/javascript" src="{{ asset("bundles/jmsdebugging/javascript/dic-visualizer.js") }}"></script>

@@ -35,7 +35,6 @@ class JMSDebuggingExtension extends Extension
         $processor = new Processor();
         $config = $processor->process($this->getConfigTree(), $configs);
 
-        $container->setParameter('jms.debugging.debug', $config['debug']);
         $container->setParameter('jms.debugging.auto_help', $config['auto_help']);
     }
 
@@ -46,9 +45,6 @@ class JMSDebuggingExtension extends Extension
         return $tb->root('jms_debugging')
                 ->children()
                     ->booleanNode('auto_help')->defaultFalse()->end()
-
-                    // this is only relevant if you want to modify the javascript files
-                    ->booleanNode('debug')->defaultFalse()->end()
                 ->end()
             ->end()
             ->buildTree();

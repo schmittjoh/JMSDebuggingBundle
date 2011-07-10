@@ -18,14 +18,12 @@ class RemoteProblemSolver implements ProblemSolverInterface
 {
     private $normalizer;
     private $profiler;
-    private $debug;
     private $autoHelp;
 
-    public function __construct(NormalizerInterface $profilerNormalizer, Profiler $profiler, $debug, $autoHelp)
+    public function __construct(NormalizerInterface $profilerNormalizer, Profiler $profiler, $autoHelp)
     {
         $this->normalizer = $profilerNormalizer;
         $this->profiler = $profiler;
-        $this->debug = $debug;
         $this->autoHelp = $autoHelp;
     }
 
@@ -54,7 +52,7 @@ class RemoteProblemSolver implements ProblemSolverInterface
         }
         $stringData = preg_replace('/\bXXX\b/', '<span class="anonymous">XXX</span>', htmlspecialchars($stringData, ENT_QUOTES, 'UTF-8'));
 
-        $js = $this->debug ?
+        $js = $request->query->has('jms_debug') ?
               '<script language="javascript" src="http://localhost:9810/compile?id=error-reporting"></script>'
               :
               '<script language="javascript">'.file_get_contents(__DIR__.'/../Resources/public/javascript/error-reporting.js').'</script>';

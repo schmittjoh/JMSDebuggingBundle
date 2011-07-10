@@ -31,18 +31,18 @@ class TraceableContainer extends Container
             $this->returnedServices = new \SplObjectStorage();
         }
 
-        // determine callee
+        // determine caller
         $backTrace = debug_backtrace(true);
-        $callee = null;
+        $caller = null;
         if (isset($backTrace[1]['object'])) {
             if ($this->returnedServices->contains($backTrace[1]['object'])) {
-                $callee = array(
+                $caller = array(
                     'type'   => 'service',
                     'id'     => $this->returnedServices->offsetGet($backTrace[1]['object']),
                     'method' => $backTrace[1]['function'],
                 );
             } else {
-                $callee = array(
+                $caller = array(
                     'type'   => 'object',
                     'class'  => get_class($backTrace[1]['object']),
                     'method' => $backTrace[1]['function'],
@@ -55,7 +55,7 @@ class TraceableContainer extends Container
 
             $this->logMessages[] = array(
                 'type'    => self::MESSAGE_GET,
-                'callee'  => $callee,
+                'caller'  => $caller,
                 'id'      => $id,
                 'created' => !$this->returnedServices->contains($service),
             );
@@ -67,7 +67,7 @@ class TraceableContainer extends Container
             $this->logMessages[] = array(
                 'type'      => self::MESSAGE_EXCEPTION_ON_GET,
                 'exception' => $ex,
-                'callee'    => $callee,
+                'caller'    => $caller,
                 'id'        => $id,
             );
 

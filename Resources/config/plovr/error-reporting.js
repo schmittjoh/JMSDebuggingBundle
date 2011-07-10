@@ -1,6 +1,6 @@
 {
       "id": "error-reporting",
-      "paths": ["@JMSDebuggingBundle/Resources/public/javascript/", "%kernel.root_dir%/src-js/"],
+      "paths": ["@JMSDebuggingBundle/Resources/js/", "%kernel.root_dir%/src-js/"],
       "mode": "ADVANCED",
       "level": "VERBOSE",
       "inputs": "@JMSDebuggingBundle/Resources/js/error_reporting_init.js",

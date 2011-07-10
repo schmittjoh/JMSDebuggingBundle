@@ -37,14 +37,14 @@ class ResponseListener
     private $problemSolvers;
     private $applied = false;
 
-    public function __construct(NormalizerInterface $normalizer, Profiler $profiler, $debug = false, $autoHelp = false)
+    public function __construct(NormalizerInterface $normalizer, Profiler $profiler, $autoHelp = false)
     {
         $this->profiler = $profiler;
 
         $this->problemSolvers = array(
             new AuthenticationCredentialsNotFoundSolver(),
             new ServiceNotFoundProblemSolver(),
-            new RemoteProblemSolver($normalizer, $profiler, $debug, $autoHelp),
+            new RemoteProblemSolver($normalizer, $profiler, $autoHelp),
         );
     }
 

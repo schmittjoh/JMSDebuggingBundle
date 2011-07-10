@@ -1,5 +1,6 @@
 goog.require('goog.structs.Map');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.debug.ErrorHandler');
 
 goog.require('jms.app.DicVisualizer');
 goog.require('jms.model.Service');

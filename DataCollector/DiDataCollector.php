@@ -2,6 +2,8 @@
 
 namespace JMS\DebuggingBundle\DataCollector;
 
+use Symfony\Component\DependencyInjection\Container;
+
 use JMS\DebuggingBundle\DependencyInjection\TraceableContainer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass;
@@ -21,7 +23,6 @@ class DiDataCollector extends DataCollector
 
     public function collect(Request $request, Response $response, \Exception $ex = null)
     {
-        $this->data['debug'] = $this->container->getParameter('jms.debugging.debug');
         $this->data['container_name'] = $name = $this->container->getParameter('kernel.container_class');
         $this->data['cache_dir'] = $this->container->getParameter('kernel.cache_dir');
         $this->data['log_messages'] = null;
@@ -29,11 +30,6 @@ class DiDataCollector extends DataCollector
         if ($this->container instanceof TraceableContainer) {
             $this->data['log_messages'] = $this->container->getLogMessages();
         }
-    }
-
-    public function isDebug()
-    {
-        return $this->data['debug'];
     }
 
     public function getContainerName()
@@ -55,7 +51,7 @@ class DiDataCollector extends DataCollector
             $services[$id] = array(
                 'alias'         => false,
                 'public'        => $definition->isPublic(),
-                'dependencies'  => array(array(), array()),
+                'dependencies'  => array(array(), array(), array(), array()),
             );
 
             if ($graph->hasNode($id)) {
@@ -75,7 +71,7 @@ class DiDataCollector extends DataCollector
             $services[$id] = array(
                 'alias'         => true,
                 'public'        => $alias->isPublic(),
-                'dependencies'  => array(array(), array()),
+                'dependencies'  => array(array(), array(), array(), array()),
             );
 
             if ($graph->hasNode($id)) {
@@ -87,6 +83,26 @@ class DiDataCollector extends DataCollector
 
                 foreach ($node->getOutEdges() as $edge) {
                     $services[$id]['dependencies'][1][] = $edge->getDestNode()->getId();
+                }
+            }
+        }
+
+        if (null !== $this->data['log_messages']) {
+            foreach ($this->data['log_messages'] as $k => $message) {
+                if ($message['caller']['type'] !== 'service') {
+                    continue;
+                }
+
+                // ignore calls from within the container as these are never weak dependencies
+                if ($message['caller']['id'] === 'service_container') {
+                    continue;
+                }
+
+                if (!in_array($message['id'], $services[$message['caller']['id']]['dependencies'][1], true)) {
+                    $services[$message['caller']['id']]['dependencies'][3][] = $message['id'];
+                }
+                if (!in_array($message['caller']['id'], $services[$message['id']]['dependencies'][2], true)) {
+                    $services[$message['id']]['dependencies'][2][] = $message['caller']['id'];
                 }
             }
         }
