@@ -5,6 +5,8 @@
       "level": "VERBOSE",
       "inputs": "@JMSDebuggingBundle/Resources/js/dic_visualizer_init.js",
             
+      "externs": ["//google_analytics_api.js", "//webkit_console.js"],
+      
       "pretty-print": true,
       "debug": true
 }

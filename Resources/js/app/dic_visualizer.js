@@ -12,14 +12,21 @@ goog.require('goog.graphics');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.ui.AutoComplete.Basic');
 goog.require('goog.History');
+goog.require('goog.history.Html5History');
 goog.require('goog.ui.PopupMenu');
 goog.require('goog.ui.MenuItem');
+goog.require('goog.ui.Button');
+goog.require('goog.ui.LinkButtonRenderer');
+
+goog.require('soy');
 
 goog.require('jms.ui.Input');
 goog.require('jms.ui.ServiceGraph');
 goog.require('jms.ui.ChoiceField');
+goog.require('jms.ui.Navigator');
 goog.require('jms.model.Service');
 goog.require('jms.routing.Router');
+goog.require('jms.templates.dic_visualizer');
 goog.require('jms.ui.graph.CostAwareNodePlacementStrategy');
 goog.require('jms.ui.graph.ForceDirectedNodePlacementStrategy');
 goog.require('jms.ui.graph.ArrowEdgeDrawingStrategy');
@@ -98,9 +105,55 @@ jms.app.DicVisualizer = function(dom, services, logMessages, maxLevel) {
     
     /**
      * @private
+     * @type {!goog.ui.Button}
+     */
+    this.displayServiceCreationButton_ = new goog.ui.Button('Created Services', goog.ui.LinkButtonRenderer.getInstance(), dom);
+    this.displayServiceCreationButton_.addEventListener(goog.ui.Component.EventType.ACTION, goog.bind(function() {
+    	this.tracker_._trackEvent("UI", "click", "Created Services");
+    	this.history_.setToken(this.router_.generate({'action': jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CREATION_PATH}));
+    }, this));
+    this.addChild(this.displayServiceCreationButton_, true);
+    
+    /**
+     * @private
+     * @type {!goog.ui.Button}
+     */
+    this.displayServiceCallsButton_ = new goog.ui.Button('Service Calls', goog.ui.LinkButtonRenderer.getInstance(), dom);
+    this.displayServiceCallsButton_.addEventListener(goog.ui.Component.EventType.ACTION, goog.bind(function() {
+    	this.tracker_._trackEvent("UI", "click", "Service Calls");
+    	this.history_.setToken(this.router_.generate({'action': jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CALLS}));
+    }, this));
+    this.addChild(this.displayServiceCallsButton_, true);
+    
+    /**
+     * @private
+     * @type {_ga_tracker}
+     */
+    this.tracker_ = null;
+    goog.events.listenOnce(dom.getWindow(), goog.events.EventType.LOAD, function() {
+    	this.tracker_ = /** @type {_ga_tracker} */ (dom.getWindow()['_gat']._createTracker(jms.app.DicVisualizer.GA_ACCOUNT));
+    	this.tracker_._setDomainName('none');
+    	this.tracker_._setAllowHash(false);
+    	this.tracker_._trackPageview(this.history_.getToken());
+    }, undefined, this);
+    
+    /**
+     * @private
      * @type {jms.ui.DirectedGraph}
      */
     this.serviceGraph_ = null;
+    
+    /**
+     * @private
+     * @type {goog.ui.Component}
+     */
+    this.serviceCreationPath_ = null;
+    
+    /**
+     * @private
+     * @type {goog.ui.Component}
+     */
+    this.serviceCalls_ = null;
     
     /**
      * @private
@@ -110,15 +163,13 @@ jms.app.DicVisualizer = function(dom, services, logMessages, maxLevel) {
     this.addChild(this.contextMenu_, false);
     this.contextMenu_.render(dom.getDocument().body);
     
-    /**
-     * This needs to be last as it will initiate the application
-     * 
-     * FIXME: Consider using goog.Html5History instead
-     * 
-     * @private
-     * @type {!goog.History}
-     */
-    this.history_ = new goog.History();
+    // initialize history (uses HTML 5 history if available)
+    if (goog.history.Html5History.isSupported(dom.getWindow())) {
+    	this.history_ = new goog.history.Html5History(dom.getWindow());
+    	this.history_.setUseFragment(true);
+    } else {
+    	this.history_ = new goog.History();
+    }
     this.history_.addEventListener(goog.history.EventType.NAVIGATE, goog.bind(this.onHistoryChange, this));
     this.history_.setEnabled(true);    
 };
@@ -133,10 +184,17 @@ jms.app.DicVisualizer.DEPENDENCY_DIRECTION = {
 };
 
 /**
+ * @type {string}
+ */
+jms.app.DicVisualizer.GA_ACCOUNT = 'UA-166816-9';
+
+/**
  * @enum {number}
  */
 jms.app.DicVisualizer.ACTIONS = {
-    DISPLAY_SERVICE: 1
+    DISPLAY_SERVICE: 1,
+    DISPLAY_SERVICE_CREATION_PATH: 2,
+    DISPLAY_SERVICE_CALLS: 3
 };
 
 /**
@@ -159,15 +217,25 @@ jms.app.DicVisualizer.prototype.onHistoryChange = function(e) {
             this.direction_ = params["direction"];
             this.directionChoiceField_.setSelectedChoice(params["direction"]);
             this.displayService(params["id"]);
+        } else if (params["action"] == jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CREATION_PATH) {
+        	this.displayServiceCreationPath(parseInt(params["currentPos"], 10));
+        } else if (params["action"] == jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CALLS) {
+        	this.displayServiceCalls();
         }
     } catch (ex) {
-        if (goog.DEBUG) {
-            alert('Routing Error: ' + ex);
-        }
+    	if (ex instanceof jms.routing.Router.NoRouteFoundException) {
+    		if (goog.DEBUG) {
+    			alert('No route found for hash "' + hash + '".');
+    		}
+    	} else {
+    		throw ex;
+    	}
     }
 };
 
 /**
+ * Registers available routes for the application.
+ * 
  * @private
  */
 jms.app.DicVisualizer.prototype.registerRoutes_ = function() {
@@ -175,10 +243,19 @@ jms.app.DicVisualizer.prototype.registerRoutes_ = function() {
     options[jms.routing.Route.optionNames.SEGMENT_SEPARATORS] = ["/"];
     
     this.router_.registerRoute(new jms.routing.Route(
-           "service/:id", { "action": jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE, "direction": jms.app.DicVisualizer.DEPENDENCY_DIRECTION.OUT }, undefined, options
+        "service/:id", { "action": jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE, "direction": jms.app.DicVisualizer.DEPENDENCY_DIRECTION.OUT }, undefined, options
     ));
     this.router_.registerRoute(new jms.routing.Route(
         "service/:id/:direction", { "action": jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE }, undefined, options
+    ));
+    this.router_.registerRoute(new jms.routing.Route(
+    	"service-calls", {"action": jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CALLS}
+    ));
+    this.router_.registerRoute(new jms.routing.Route(
+    	"service-creation-path", {"action": jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CREATION_PATH, "currentPos": 0}
+    ));
+    this.router_.registerRoute(new jms.routing.Route(
+        "service-creation-path/:currentPos", {"action": jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CREATION_PATH}, {"currentPos": "(\\d+)"}		
     ));
 };
 
@@ -187,6 +264,10 @@ jms.app.DicVisualizer.prototype.registerRoutes_ = function() {
  */
 jms.app.DicVisualizer.prototype.enterDocument = function() {
     goog.base(this, 'enterDocument');
+    
+    var dom = this.getDomHelper();
+    dom.appendChild(this.getElement(), soy.renderAsFragment(jms.templates.dic_visualizer.attribution));
+    dom.appendChild(dom.getDocument().body, dom.createDom('script', {'src': 'http://www.google-analytics.com/ga.js', 'type': 'text/javascript'}));
     
     var autocomplete = new goog.ui.AutoComplete.Basic(this.services_.getKeys(), this.searchInput_.getElement(), false, true);
     autocomplete.addEventListener(goog.ui.AutoComplete.EventType.UPDATE, goog.bind(this.onSearchInputUpdate, this));
@@ -204,6 +285,88 @@ jms.app.DicVisualizer.prototype.changeHistory = function(id) {
     }
 };
 
+jms.app.DicVisualizer.prototype.displayServiceCalls = function() {
+	this.clearPage_();
+	
+	this.serviceCalls_ = new goog.ui.Component();
+	this.addChild(this.serviceCalls_, true);
+	this.serviceCalls_.getElement().id = 'jms-service-calls';
+	
+	// prepare template data
+	var messages = [];
+	var createdServices = 0;
+	var totalTime = 0;
+	for (var i=0, c=this.logMessages_.length; i<c; i++) {
+		var created = this.logMessages_[i].hasException() || false === this.logMessages_[i].isCreated();
+		
+		if (created) {
+			createdServices += 1;
+		}
+		
+		totalTime += this.logMessages_[i].getTime();
+		
+		messages.push({
+			id: this.logMessages_[i].getId(),
+			caller: this.logMessages_[i].getCallerName(),
+			created: created? 'false' : 'true',
+			time: Math.round(this.logMessages_[i].getTime()*1000000)/1000
+		});
+	}
+	
+	soy.renderElement(this.serviceCalls_.getElement(), jms.templates.dic_visualizer.created_services, {
+		createdServices: createdServices,
+		messages: messages,
+		totalTime: Math.round(totalTime*1000000)/1000
+	});
+};
+
+/**
+ * Displays the path for service creation.
+ * 
+ * @param {number} currentPos
+ * @private
+ */
+jms.app.DicVisualizer.prototype.displayServiceCreationPath = function(currentPos) {
+	if (null === this.serviceCreationPath_) {
+		this.clearPage_();
+		
+		this.serviceCreationPath_ = new goog.ui.Component(this.getDomHelper());
+		this.addChild(this.serviceCreationPath_, true);
+		this.serviceCreationPath_.getElement().id = 'jms-created-services';
+
+		var navigator = new jms.ui.Navigator(0, this.logMessages_.length - 1, 10, this.getDomHelper());
+		navigator.setId('navigator');
+		var updateCurrentPos = goog.bind(function() {
+			this.history_.setToken(this.router_.generate({"action": jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CREATION_PATH, "currentPos": navigator.getCurrentPos()}));
+		}, this);
+		navigator.addEventListener(jms.ui.Navigator.EventType.NEXT, updateCurrentPos);
+		navigator.addEventListener(jms.ui.Navigator.EventType.PREVIOUS, updateCurrentPos);
+		this.serviceCreationPath_.addChild(navigator, true);
+	}
+
+	this.serviceCreationPath_.getChild('navigator').setCurrentPos(currentPos);
+	
+	var uiGraph = this.serviceCreationPath_.getChild('graph');
+	if (null !== uiGraph) {
+		this.serviceCreationPath_.removeChild(uiGraph, true);
+	}
+	
+	// prepare graph structure
+	var graph = new jms.structs.DirectedGraph();
+	for (var i=currentPos, c=Math.min(currentPos + 10, this.logMessages_.length); i<c; i++) {
+		var sourceNode = graph.getOrCreateNode(this.logMessages_[i].getCaller().getRealId());
+		var targetNode = graph.getOrCreateNode(this.logMessages_[i].getId());
+		graph.connect(sourceNode.getId(), targetNode.getId(), false);
+	}
+	
+	var edgeDrawingStrategy = new jms.ui.graph.ArrowEdgeDrawingStrategy();
+	edgeDrawingStrategy.setAddIndex(true);
+	
+	uiGraph = new jms.ui.DirectedGraph(this.calculateSize_(this.vsm_.getSize()), graph, undefined, undefined, edgeDrawingStrategy, this.getDomHelper());
+	uiGraph.setId('graph');
+	this.serviceCreationPath_.addChild(uiGraph, true);
+};
+
 /**
  * Displays the graph around a specific service
  * 
@@ -218,10 +381,7 @@ jms.app.DicVisualizer.prototype.displayService = function(id, opt_level) {
     
     var maxLevel = opt_level || this.maxLevel_;
     
-    if (null !== this.serviceGraph_) {
-        this.serviceGraph_.dispose();
-        this.serviceGraph_ = null;
-    }
+    this.clearPage_();
     
     var digraph = this.generateDigraph_(id, maxLevel);
 //    var nodePlacementStrategy = new jms.ui.graph.CostAwareNodePlacementStrategy(new jms.ui.graph.ForceDirectedNodePlacementStrategy());
@@ -230,12 +390,42 @@ jms.app.DicVisualizer.prototype.displayService = function(id, opt_level) {
     this.serviceGraph_.addEventListener(goog.events.EventType.DBLCLICK, goog.bind(function(e) {
         var serviceNode = /** @type {!jms.ui.ServiceNode} */ (e.target);
         
+        this.tracker_._trackEvent("UI", "dbclick", "Service");
+        
         this.changeHistory(serviceNode.getService().getId());
     }, this));
     this.serviceGraph_.addEventListener(goog.events.EventType.CONTEXTMENU, goog.bind(this.showContextmenu, this));
+    this.serviceGraph_.addEventListener(goog.fx.Dragger.EventType.END, goog.bind(function() {
+    	this.tracker_._trackEvent("UI", "drag", "Service");
+    }, this));
     this.addChild(this.serviceGraph_, true);
     
     goog.dom.classes.add(this.serviceGraph_.getUiNode(id).getElement(), 'jms-ui-node-highlight');
+};
+
+/**
+ * Clears the current page of any display elements.
+ * 
+ * This method does only delete elements which belong to a specific
+ * action, not the general UI elements.
+ * 
+ * @private
+ */
+jms.app.DicVisualizer.prototype.clearPage_ = function() {
+	if (null !== this.serviceGraph_) {
+		this.serviceGraph_.dispose();
+		this.serviceGraph_ = null;
+	}
+
+	if (null !== this.serviceCreationPath_) {
+		this.serviceCreationPath_.dispose();
+		this.serviceCreationPath_ = null;
+	}
+	
+	if (null !== this.serviceCalls_) {
+		this.serviceCalls_.dispose();
+		this.serviceCalls_ = null;
+	}
 };
 
 /**
@@ -248,6 +438,8 @@ jms.app.DicVisualizer.prototype.showContextmenu = function(e) {
     var dom = this.getDomHelper();
     
     e.preventDefault();
+    
+    this.tracker_._trackEvent("UI", "click", "Service Contextmenu");
     
     this.contextMenu_.removeChildren(true);
     
@@ -349,6 +541,9 @@ jms.app.DicVisualizer.prototype.getServiceData_ = function(id) {
  */
 jms.app.DicVisualizer.prototype.onSearchInputUpdate = function(e) {
     var id = /** @type {string} */ (e.row);
+    
+    this.tracker_._trackEvent("UI", "change", "Search Input");
+    
     this.changeHistory(id);
 };
 
@@ -359,6 +554,8 @@ jms.app.DicVisualizer.prototype.onSearchInputUpdate = function(e) {
  */
 jms.app.DicVisualizer.prototype.onDirectionChange = function(e) {
     this.direction_ = /** @type {string} */ (e.target.getSelectedChoice());
+    
+    this.tracker_._trackEvent("UI", "click", "Direction Change");
     
     if (null !== this.currentServiceId_) {
         this.changeHistory(this.currentServiceId_);

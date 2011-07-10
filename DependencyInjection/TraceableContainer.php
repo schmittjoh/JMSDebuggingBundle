@@ -12,6 +12,7 @@ class TraceableContainer extends Container
 
     private $logMessages = array();
     private $returnedServices;
+    private $startTime;
 
     public function set($id, $service, $scope = ContainerInterface::SCOPE_CONTAINER)
     {
@@ -50,26 +51,47 @@ class TraceableContainer extends Container
             }
         }
 
+        $message = array();
+        $this->logMessages[] = &$message;
+
+        $parentTime = null;
+        if (null !== $this->startTime) {
+            $parentTime = $this->startTime;
+        }
+        $this->startTime = microtime(true);
         try {
             $service = parent::get($id, $invalid);
 
-            $this->logMessages[] = array(
-                'type'    => self::MESSAGE_GET,
-                'caller'  => $caller,
-                'id'      => $id,
-                'created' => !$this->returnedServices->contains($service),
-            );
+            $message['type'] = self::MESSAGE_GET;
+            $message['caller'] = $caller;
+            $message['id'] = $id;
+            $message['created'] = !$this->returnedServices->contains($service);
+            $message['time'] = microtime(true) - $this->startTime;
 
             $this->returnedServices->offsetSet($service, $id);
 
+            if (null !== $parentTime) {
+                $this->startTime = $parentTime + $message['time'];
+            } else {
+                $this->startTime = null;
+            }
+
             return $service;
         } catch (\Exception $ex) {
-            $this->logMessages[] = array(
-                'type'      => self::MESSAGE_EXCEPTION_ON_GET,
-                'exception' => $ex,
-                'caller'    => $caller,
-                'id'        => $id,
+            $message['type'] = self::MESSAGE_EXCEPTION_ON_GET;
+            $message['exception'] = array(
+                'class' => get_class($ex),
+                'message' => $ex->getMessage(),
             );
+            $message['caller'] = $caller;
+            $message['id'] = $id;
+            $message['time'] = microtime(true) - $this->startTime;
+
+            if (null !== $parentTime) {
+                $this->startTime = $parentTime + $message['time'];
+            } else {
+                $this->startTime = null;
+            }
 
             throw $ex;
         }

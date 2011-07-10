@@ -1,10 +1,58 @@
 {namespace jms.templates.dic_visualizer}
 
 /**
+ * Renders the created services
+ * @param createdServices
+ * @param messages
+ * @param totalTime
+ */
+{template .created_services}
+
+    <h3>Statistics</h3>
+    <table>
+    	<tr>
+    		<th width="30%">Created Services</th>
+    		<td width="70%">{$createdServices}</td>
+    	</tr>
+    	<tr>
+    		<th>Service Calls</th>
+    		<td>{length($messages)}</td>
+    	</tr>
+    	<tr>
+    		<th><abbr title="The total amount of time to perform all service calls.">Time</abbr></th>
+    		<td>{$totalTime} ms</td>
+    	</tr>
+    </table>
+
+	<h3>Service Calls</h3>
+	<table>
+		<thead>
+			<th colspan="2"><abbr title="The place from where the call originates">Caller</abbr></th>
+			<th>Requested Service</th>
+			<th><abbr title="Whether the service was created with this call">Created?</abbr></th>
+			<th><abbr title="The time that it took to return the service, this does not include the time to construct dependencies">Time</abbr></th>
+		</thead>
+		<tbody>
+			{foreach $message in $messages}
+			<tr>
+				<td>{index($message)+1}</td>
+				<td>{$message.caller}</td>
+				<td>{$message.id}</td>
+				<td>{$message.created}</td>
+				<td>{$message.time} ms</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+{/template}
+
+/**
  * Renders the attribution node on the DIC visualizer page
  */
 {template .attribution}
     <div id="jms-dic-attr">
-        (C) 2011 Johannes M. Schmitt <schmittjoh@gmail.com> - All rights reserved.
+        <span>created by Johannes M. Schmitt</span>  
+        <a href="http://www.twitter.com/JohannesMS"><img src="http://twitter-badges.s3.amazonaws.com/t_mini-a.png" alt="Follow JohannesMS on Twitter"/></a>
+        <a href="https://github.com/schmittjoh" alt="Follow @schmittjoh on GitHub" class="github-link"><img src="https://github.com/favicon.ico" /></a>
     </div>
 {/template}

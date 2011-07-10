@@ -110,6 +110,11 @@ class DiDataCollector extends DataCollector
         return $services;
     }
 
+    public function getLogMessages()
+    {
+        return $this->data['log_messages'];
+    }
+
     public function getContainerBuilder()
     {
         if (null !== $this->containerBuilder) {

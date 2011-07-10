@@ -44,6 +44,23 @@ jms.model.Caller.prototype.getId = function() {
 };
 
 /**
+ * This returns the same like getId except for cases where the calls
+ * originates from within the service container itself.
+ * 
+ * @return {string}
+ */
+jms.model.Caller.prototype.getRealId = function() {
+	if ('service_container' !== this.id_) {
+		return this.id_;
+	}
+
+	var callerId = this.method_.substring(3, this.method_.length - 7);
+	
+	// same transformations like Container::underscore()
+	return callerId.replace(/_/g, '.').replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2').replace(/([a-z\d])([A-Z])/g, '$1_$2').toLowerCase()
+};
+
+/**
  * @return {?string}
  */
 jms.model.Caller.prototype.getMethod = function() {
