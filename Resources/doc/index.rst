@@ -44,7 +44,7 @@ Add DebuggingBundle to your application kernel
 
     public function registerBundles()
     {
-        if ($this->isDebug()) {
+        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // ...
             $bundles[] = new JMS\DebuggingBundle\JMSDebuggingBundle($this);
             // ...
@@ -65,7 +65,7 @@ the range of about 10-30 micro seconds per service call (only in dev environment
     
     protected function getContainerBaseClass()
     {
-        if ($this->isDebug()) {
+        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             return '\JMS\DebuggingBundle\DependencyInjection\TraceableContainer';
         }
 
