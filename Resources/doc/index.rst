@@ -53,7 +53,7 @@ Add DebuggingBundle to your application kernel
     {
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // ...
-            $bundles[] = new JMS\DebuggingBundle\JMSDebuggingBundle($this);
+            $bundles[] = new JMS\JMSDebuggingBundle\JMSDebuggingBundle($this);
             // ...
         }
     }
