@@ -25,7 +25,7 @@ Add DebuggingBundle to your vendor/bundles/ dir
 
     [JMSDebuggingBundle]
         git=https://github.com/schmittjoh/JMSDebuggingBundle.git
-        target=/bundles/JMS/JMSDebuggingBundle
+        target=/bundles/JMS/DebuggingBundle
 
 
 Add the JMS namespace to your autoloader
@@ -53,7 +53,7 @@ Add DebuggingBundle to your application kernel
     {
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // ...
-            $bundles[] = new JMS\JMSDebuggingBundle\JMSDebuggingBundle($this);
+            $bundles[] = new JMS\DebuggingBundle\JMSDebuggingBundle($this);
             // ...
         }
     }
