@@ -19,7 +19,7 @@ Add DebuggingBundle to your vendor/bundles/ dir
 
 ::
 
-    $ git submodule add git://github.com/schmittjoh/DebuggingBundle.git vendor/bundles/JMS/DebuggingBundle
+    $ git submodule add git://github.com/schmittjoh/JMSDebuggingBundle.git vendor/bundles/JMS/DebuggingBundle
 
 ::
 
