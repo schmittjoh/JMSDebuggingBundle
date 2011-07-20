@@ -21,6 +21,13 @@ Add DebuggingBundle to your vendor/bundles/ dir
 
     $ git submodule add git://github.com/schmittjoh/DebuggingBundle.git vendor/bundles/JMS/DebuggingBundle
 
+::
+
+    [DebuggingBundle]
+        git=https://github.com/schmittjoh/DebuggingBundle.git
+        target=/bundles/JMS/DebuggingBundle
+
+
 Add the JMS namespace to your autoloader
 ----------------------------------------
 
