@@ -84,7 +84,7 @@ class TraceableContainer extends Container
                 'message' => $ex->getMessage(),
             );
             $message['caller'] = $caller;
-            $message['id'] = $id;
+            $message['id'] = !is_string($id) ? 'NN' : $id;
             $message['time'] = microtime(true) - $this->startTime;
 
             if (null !== $parentTime) {
