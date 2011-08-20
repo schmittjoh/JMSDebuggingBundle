@@ -217,7 +217,7 @@ class ProfilerNormalizer extends SerializerAwareNormalizer
 
             if ('object' === $type && !$this->isNamespaceWhitelisted($value)) {
                 $value = 'XXX';
-            } else if ('array' === $type) {
+            } else if ('array' === $type && is_array($value)) {
                 $value = $this->purgeArgsRecursive($value);
             } else if ('string' === $type) {
                 if ($this->isFilePath($value)) {
