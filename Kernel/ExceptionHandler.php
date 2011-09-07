@@ -81,7 +81,7 @@ class ExceptionHandler
             $this->filterResponse($event, $origException);
             $event->getResponse()->send();
         } catch (\Exception $ex) {
-            echo "Exception while handling exception: ".$ex->getMessage();
+            echo "Exception while handling exception: ".$ex->getMessage()."<br/>Original Exception: ".$exception->getMessage();
         }
     }
 
