@@ -1,0 +1,79 @@
+{% extends 'SecurityBundle:Collector:security.html.twig' %}
+
+{% block panel %}
+	{{ parent() }}
+
+	<style type="text/css">
+		#collector_content tr.security-match > td {
+			background-color: #f1f1f1;
+			border-bottom: 2px solid #000;
+		}
+
+		#collector_content .security-attr {
+			float: right;
+			font-size:11px;
+		}
+	</style>
+
+	<div class="security-attr">
+		provided by <a href="https://github.com/schmittjoh/JMSDebuggingBundle">JMSDebuggingBundle</a>
+	</div>
+
+	<h3 style="margin-bottom:0px;">Firewall</h3>
+
+	<table>
+		<tr>
+			<th>Contexts</th>
+			<td>
+				<table class="foo">
+					<thead>
+						<tr>
+							<th>Pos</th>
+							<th>Name</th>
+							<th>Matches?</th>
+							<th><abbr title="Why didn't it match?">Reason</abbr></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for id, match in collector.contextTrace %}
+						<tr{% if match.matches %} class="security-match"{% endif %}>
+							<td>{{ loop.index }}</td>
+							<td>{{ id }}</td>
+							<td>{{ match.matches|json_encode }}</td>
+							<td>{{ match.reason }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr
+		<tr>
+			<th>Listeners</th>
+			<td>
+				<table>
+					<thead>
+						<tr>
+							<th>Pos</th>
+							<th>Class</th>
+							<th>Called</th>
+							<th><abbr title="Authentication handled?">Handled?</abbr></th>
+							<th><abbr title="Why was it not handled?">Reason</abbr></th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for listener in collector.listeners %}
+						<tr{% if listener.handled %} class="security-match"{% endif %}>
+							<td>{{ loop.index }}</td>
+							<td><abbr title="{{ listener.class }}">{{ listener.short_name }}</abbr></td>
+							<td>{{ listener.called|json_encode }}</td>
+							<td>{{ listener.handled|json_encode }}</td>
+							<td>{{ listener.reason }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</table>
+{% endblock %}

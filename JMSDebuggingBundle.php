@@ -18,6 +18,7 @@
 
 namespace JMS\DebuggingBundle;
 
+use JMS\DebuggingBundle\DependencyInjection\Compiler\IntegrationPass;
 use Symfony\Component\HttpKernel\KernelInterface;
 use JMS\DebuggingBundle\Kernel\ExceptionHandler;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -42,6 +43,7 @@ class JMSDebuggingBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new IntegrationPass());
         $container->addCompilerPass(new ContainerBuilderDebugDumpPass(), PassConfig::TYPE_BEFORE_REMOVING);
     }
 }

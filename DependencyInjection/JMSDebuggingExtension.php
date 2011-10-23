@@ -36,6 +36,11 @@ class JMSDebuggingExtension extends Extension
         $config = $processor->process($this->getConfigTree(), $configs);
 
         $container->setParameter('jms.debugging.auto_help', $config['auto_help']);
+
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['SecurityBundle'])) {
+            $loader->load('security.xml');
+        }
     }
 
     private function getConfigTree()
