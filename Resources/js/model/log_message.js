@@ -4,7 +4,7 @@ goog.provide('jms.model.LogMessage');
  * @constructor
  * @param {number} type
  * @param {string} id
- * @param {!jms.model.Caller} caller 
+ * @param {jms.model.Caller} caller 
  * @param {number} time
  */
 jms.model.LogMessage = function(type, id, caller, time) {
@@ -45,7 +45,7 @@ jms.model.LogMessage.prototype.getId = function() {
 };
 
 /**
- * @return {!jms.model.Caller}
+ * @return {jms.model.Caller}
  */
 jms.model.LogMessage.prototype.getCaller = function() {
 	return this.caller_;
@@ -55,6 +55,10 @@ jms.model.LogMessage.prototype.getCaller = function() {
  * @return {string}
  */
 jms.model.LogMessage.prototype.getCallerName = function() {
+	if (null === this.caller_) {
+		return '';
+	}
+	
 	var callerId = this.caller_.getId();
 	
 	// determine the real service

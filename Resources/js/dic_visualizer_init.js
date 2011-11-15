@@ -35,13 +35,13 @@ jms.app.DicVisualizer.install = function(id, containerData, rawLogMessages) {
     var logMessages = [];
     if (null !== rawLogMessages) {
 	    goog.array.forEach(rawLogMessages, function(rawMessage) {
-	        var caller = new jms.model.Caller(
+	        var caller = null !== rawMessage['caller'] ? new jms.model.Caller(
 	            rawMessage['caller']['type'] === 'service'
 	            ? jms.model.Caller.Type.SERVICE : jms.model.Caller.Type.OBJECT,
 	            rawMessage['caller']['type'] === 'service'
 	            ? rawMessage['caller']['id'] : rawMessage['caller']['class'],
 	            rawMessage['caller']['method']
-	        );
+	        ) : null;
 	        var message = new jms.model.LogMessage(rawMessage['type'], rawMessage['id'], caller, rawMessage['time']);
 	        
 	        if (jms.model.LogMessage.Type.GET === rawMessage['type']) {
