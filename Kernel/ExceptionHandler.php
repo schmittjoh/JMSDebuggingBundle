@@ -68,7 +68,7 @@ class ExceptionHandler
             $origException = $exception;
             $exception = FlattenException::create($exception);
 
-            $codeHelper = new CodeHelper(null, $this->kernel->getRootDir());
+            $codeHelper = new CodeHelper(null, $this->kernel->getRootDir(), 'UTF-8');
             $title    = $exception->getMessage().' (500 Internal Server Error)';
             $template = 'Exception/exception.html.php';
 
