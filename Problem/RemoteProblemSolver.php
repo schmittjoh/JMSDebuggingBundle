@@ -5,7 +5,7 @@ namespace JMS\DebuggingBundle\Problem;
 use JMS\DebuggingBundle\Solution\RichClientSolution;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use JMS\DebuggingBundle\Serializer\ProfilerNormalizer;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -20,7 +20,7 @@ class RemoteProblemSolver implements ProblemSolverInterface
     private $profiler;
     private $autoHelp;
 
-    public function __construct(NormalizerInterface $profilerNormalizer, Profiler $profiler, $autoHelp)
+    public function __construct(ProfilerNormalizer $profilerNormalizer, Profiler $profiler, $autoHelp)
     {
         $this->normalizer = $profilerNormalizer;
         $this->profiler = $profiler;
