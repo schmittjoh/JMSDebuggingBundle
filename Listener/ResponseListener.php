@@ -21,7 +21,7 @@ namespace JMS\DebuggingBundle\Listener;
 use JMS\DebuggingBundle\Problem\ServiceNotFoundProblemSolver;
 use JMS\DebuggingBundle\Problem\AuthenticationCredentialsNotFoundSolver;
 use JMS\DebuggingBundle\Problem\RemoteProblemSolver;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use JMS\DebuggingBundle\Serializer\ProfilerNormalizer;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -37,7 +37,7 @@ class ResponseListener
     private $problemSolvers;
     private $applied = false;
 
-    public function __construct(NormalizerInterface $normalizer, Profiler $profiler, $autoHelp = false)
+    public function __construct(ProfilerNormalizer $normalizer, Profiler $profiler, $autoHelp = false)
     {
         $this->profiler = $profiler;
 
