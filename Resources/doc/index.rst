@@ -26,7 +26,7 @@ Add DebuggingBundle to your vendor/bundles/ dir
 ::
 
     [JMSDebuggingBundle]
-        git=https://github.com/schmittjoh/JMSDebuggingBundle.git
+        git=git://github.com/schmittjoh/JMSDebuggingBundle.git
         target=/bundles/JMS/DebuggingBundle
 
 
