@@ -32,8 +32,7 @@ class JMSDebuggingExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $processor = new Processor();
-        $config = $processor->process($this->getConfigTree(), $configs);
+        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter('jms.debugging.auto_help', $config['auto_help']);
 
@@ -41,17 +40,5 @@ class JMSDebuggingExtension extends Extension
         if (isset($bundles['SecurityBundle'])) {
             $loader->load('security.xml');
         }
-    }
-
-    private function getConfigTree()
-    {
-        $tb = new TreeBuilder();
-
-        return $tb->root('jms_debugging')
-                ->children()
-                    ->booleanNode('auto_help')->defaultFalse()->end()
-                ->end()
-            ->end()
-            ->buildTree();
     }
 }
