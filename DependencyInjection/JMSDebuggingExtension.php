@@ -32,7 +32,7 @@ class JMSDebuggingExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $config = $this->processConfiguration(new Configuration(), $configs);
 
         $container->setParameter('jms.debugging.auto_help', $config['auto_help']);
 
