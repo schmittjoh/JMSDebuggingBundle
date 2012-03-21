@@ -1,0 +1,12 @@
+{
+    "name": "jms/debugging-bundle",
+    "type": "symfony-bundle",
+    "description": "This bundle provides advanced debugging tools (for your Symfony2 project).",
+    "homepage": "https://github.com/schmittjoh/JMSDebuggingBundle",
+    "license": "Apache",
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "2.0.0"
+    },
+    "target-dir": "JMS/DebuggingBundle"
+}
