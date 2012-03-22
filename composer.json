@@ -3,8 +3,8 @@
     "type": "symfony-bundle",
     "description": "This bundle provides advanced debugging tools (for your Symfony2 project).",
     "keywords": ["debugging"],
-    "homepage": "https://github.com/schmittjoh/JMSDebuggingBundle",
-    "license": "Apache",
+    "homepage": "http://jmsyst.com/bundles/JMSDebuggingBundle",
+    "license": "Apache2",
     "authors": [
         {
             "name": "Johannes M. Schmitt",
@@ -17,6 +17,5 @@
     },
     "autoload": {
         "psr-0": { "JMS\\DebuggingBundle": "" }
-    },
-    "target-dir": "JMS/DebuggingBundle"
+    }
 }
