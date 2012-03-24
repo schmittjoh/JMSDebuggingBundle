@@ -18,5 +18,5 @@
     "autoload": {
         "psr-0": { "JMS\\DebuggingBundle": "" }
     },
-    "target-dir": "JMS\\DebuggingBundle"
+    "target-dir": "JMS/DebuggingBundle"
 }
