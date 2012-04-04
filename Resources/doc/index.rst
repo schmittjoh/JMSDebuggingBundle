@@ -81,6 +81,17 @@ the range of about 10-30 micro seconds per service call (only in dev environment
         return parent::getContainerBaseClass();
     }
 
+
+Publish web assets
+------------------
+
+Don't forget to update your web assets by running the following command:
+
+::
+
+    $ php app/console assets:install web/
+
+
 Configuration
 =============
 
