@@ -44,7 +44,7 @@ class ResponseListener
         $this->problemSolvers = array(
             new AuthenticationCredentialsNotFoundSolver(),
             new ServiceNotFoundProblemSolver(),
-            new RemoteProblemSolver($normalizer, $profiler, $autoHelp),
+//            new RemoteProblemSolver($normalizer, $profiler, $autoHelp),
         );
     }
 
