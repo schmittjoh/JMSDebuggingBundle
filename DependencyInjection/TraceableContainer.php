@@ -20,6 +20,7 @@ class TraceableContainer extends Container
             $this->returnedServices = new \SplObjectStorage();
         }
 
+        $id = strtolower($id);
         $rs = parent::set($id, $service, $scope);
         $this->returnedServices->offsetSet($service, $id);
 
@@ -31,6 +32,8 @@ class TraceableContainer extends Container
         if (null === $this->returnedServices) {
             $this->returnedServices = new \SplObjectStorage();
         }
+
+        $id = strtolower($id);
 
         // determine caller
         $backTrace = debug_backtrace(true);
