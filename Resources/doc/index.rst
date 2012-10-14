@@ -16,7 +16,9 @@ Note: This Bundle uses Google Analytics to track usage, however no sensitive/per
 Installation
 ============
 
-Add DebuggingBundle to your vendor/bundles/ dir
+
+
+1. Old way by adding to your vendor/bundles/ dir
 -----------------------------------------------
 
 ::
@@ -28,6 +30,20 @@ Add DebuggingBundle to your vendor/bundles/ dir
     [JMSDebuggingBundle]
         git=git://github.com/schmittjoh/JMSDebuggingBundle.git
         target=/bundles/JMS/DebuggingBundle
+
+
+2. Composer
+-----------
+
+Add the following dependencies to your projects composer.json file:
+
+::
+
+    "require": {
+        # ..
+        "jms/debugging-bundle": "dev-master"
+        # ..
+    }
 
 
 Add the JMS namespace to your autoloader
