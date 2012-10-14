@@ -16,33 +16,18 @@ Note: This Bundle uses Google Analytics to track usage, however no sensitive/per
 Installation
 ============
 
-Add DebuggingBundle to your vendor/bundles/ dir
------------------------------------------------
+Composer
+-----------
+
+Add the following dependencies to your projects composer.json file:
 
 ::
 
-    $ git submodule add git://github.com/schmittjoh/JMSDebuggingBundle.git vendor/bundles/JMS/DebuggingBundle
-
-::
-
-    [JMSDebuggingBundle]
-        git=git://github.com/schmittjoh/JMSDebuggingBundle.git
-        target=/bundles/JMS/DebuggingBundle
-
-
-Add the JMS namespace to your autoloader
-----------------------------------------
-
-If you are using the Symfony Standard Edition, you can skip this step as this namespace
-is already registered.
-
-::
-
-    // app/autoload.php
-    $loader->registerNamespaces(array(
-        'JMS' => __DIR__.'/../vendor/bundles',
-        // your other namespaces
-    );
+    "require": {
+        # ..
+        "jms/debugging-bundle": "dev-master"
+        # ..
+    }
 
 Add DebuggingBundle to your application kernel
 ----------------------------------------------
