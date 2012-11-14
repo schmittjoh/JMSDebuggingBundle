@@ -13,8 +13,10 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Http\FirewallMapInterface;
 use Symfony\Component\Security\Http\Firewall;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-class TraceableFirewall
+class TraceableFirewall implements EventSubscriberInterface
 {
     private $map;
     private $dispatcher;
@@ -28,7 +30,7 @@ class TraceableFirewall
     /**
      * Constructor.
      *
-     * @param FirewallMap              $map        A FirewallMap instance
+     * @param TraceableMap             $map        A FirewallMap instance
      * @param EventDispatcherInterface $dispatcher An EventDispatcherInterface instance
      */
     public function __construct(TraceableMap $map, EventDispatcherInterface $dispatcher)
@@ -41,6 +43,11 @@ class TraceableFirewall
     public function setRouter(RouterInterface $router)
     {
         $this->router = $router;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(KernelEvents::REQUEST => array('onKernelRequest', 8));
     }
 
     /**
