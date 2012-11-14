@@ -22,7 +22,7 @@ class TraceableRequestMatcher extends RequestMatcher
     public function matches(Request $request)
     {
         $methods = $this->getFieldValue('methods');
-        if (null !== $methods && !in_array($request->getMethod(), $methods)) {
+        if ($methods && !in_array($request->getMethod(), $methods)) {
             self::$lastMatch = sprintf('Method did not match. Expected one of "%s", but got "%s".', implode($methods), $request->getMethod());
 
             return false;
@@ -55,7 +55,7 @@ class TraceableRequestMatcher extends RequestMatcher
         }
 
         $host = $this->getFieldValue('host');
-        if (null !== $host && !preg_match($host = '#'.str_replace('#', '\\#', $host).'#', $request->getHost())) {
+        if (null !== $host && !preg_match($host = '#'.str_replace('#', '\\#', $host).'#i', $request->getHost())) {
             self::$lastMatch = sprintf(
                 'Host did not match. Expected regex pattern "%s", but got host "%s".',
                 $host,
