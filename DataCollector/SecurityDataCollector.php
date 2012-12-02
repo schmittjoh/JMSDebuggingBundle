@@ -26,7 +26,7 @@ class SecurityDataCollector extends BaseSecurityDataCollector
         $listeners = array();
         $listenerTrace = $this->firewall->getListenerTrace();
         $handlingListener = $this->firewall->getHandlingListener();
-        foreach ($this->firewall->getListeners() as $listener) {
+        foreach ($this->firewall->getListeners() ?: array() as $listener) {
             $data = array(
                 'class' => $class = get_class($listener),
                 'short_name' => substr($class, strrpos($class, '\\') + 1),
