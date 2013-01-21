@@ -23,7 +23,10 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class NullProfilerStorage implements ProfilerStorageInterface
 {
-    public function find($ip, $url, $limit, $method)
+    /**
+     * {@inheritdoc}
+     */
+    public function find($ip, $url, $limit, $method, $start = null, $end = null)
     {
         return array();
     }
@@ -33,16 +36,25 @@ class NullProfilerStorage implements ProfilerStorageInterface
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($token)
     {
         return '';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write(Profile $profile)
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function purge()
     {
     }
