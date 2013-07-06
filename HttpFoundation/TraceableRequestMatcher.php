@@ -4,6 +4,7 @@ namespace JMS\DebuggingBundle\HttpFoundation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcher;
+use Symfony\Component\HttpFoundation\IpUtils as IpUtils;
 
 class TraceableRequestMatcher extends RequestMatcher
 {
@@ -65,15 +66,17 @@ class TraceableRequestMatcher extends RequestMatcher
             return false;
         }
 
-        $ip = $this->getFieldValue('ip');
-        if (null !== $ip && !$this->checkIp($request->getClientIp(), $ip)) {
-            self::$lastMatch = sprintf(
-                'IP did not match. Expected pattern "%s", but got "%s".',
-                $ip,
-                $request->getClientIp()
-            );
-
-            return false;
+        $ips = $this->getFieldValue('ips');
+        foreach ($ips as $ip) {
+            if (!IpUtils::checkIp($request->getClientIp(), $ip)) {
+                self::$lastMatch = sprintf(
+                    'IP did not match. Expected pattern "%s", but got "%s".',
+                    $ip,
+                    $request->getClientIp()
+                );
+    
+                return false;
+            }
         }
 
         self::$lastMatch = true;
