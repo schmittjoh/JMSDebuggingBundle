@@ -67,7 +67,7 @@ class TraceableRequestMatcher extends RequestMatcher
 
         // Support old Symfony 2.1 way of doing things.
         if (property_exists('Symfony\Component\HttpFoundation\RequestMatcher', 'ip')) {
-            $ips = [ $this->getFieldValue('ip') ];
+            $ips = array($this->getFieldValue('ip'));
             $checkIpClass = 'Symfony\Component\HttpFoundation\RequestMatcher';
 
         // Support new Symfony 2.3 way of doing things.
