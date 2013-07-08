@@ -68,10 +68,14 @@ class TraceableContainer extends Container
             $message['type'] = self::MESSAGE_GET;
             $message['caller'] = $caller;
             $message['id'] = $id;
-            $message['created'] = !$this->returnedServices->contains($service);
             $message['time'] = microtime(true) - $this->startTime;
 
-            $this->returnedServices->offsetSet($service, $id);
+            if (is_object($service)) {
+                $message['created'] = !$this->returnedServices->contains($service);
+                $this->returnedServices->offsetSet($service, $id);
+            } else {
+                $message['created'] = false;
+            }
 
             if (null !== $parentTime) {
                 $this->startTime = $parentTime + $message['time'];
