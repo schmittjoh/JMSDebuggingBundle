@@ -22,7 +22,10 @@ class TraceableContainer extends Container
 
         $id = strtolower($id);
         $rs = parent::set($id, $service, $scope);
-        $this->returnedServices->offsetSet($service, $id);
+
+        if (is_object($service)) {
+            $this->returnedServices->offsetSet($service, $id);
+        }
 
         return $rs;
     }
