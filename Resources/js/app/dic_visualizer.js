@@ -267,7 +267,7 @@ jms.app.DicVisualizer.prototype.enterDocument = function() {
     
     var dom = this.getDomHelper();
     dom.appendChild(this.getElement(), soy.renderAsFragment(jms.templates.dic_visualizer.attribution));
-    dom.appendChild(dom.getDocument().body, dom.createDom('script', {'src': 'http://www.google-analytics.com/ga.js', 'type': 'text/javascript'}));
+    dom.appendChild(dom.getDocument().body, dom.createDom('script', {'src': '//www.google-analytics.com/ga.js', 'type': 'text/javascript'}));
     
     var autocomplete = new goog.ui.AutoComplete.Basic(this.services_.getKeys(), this.searchInput_.getElement(), false, true);
     autocomplete.addEventListener(goog.ui.AutoComplete.EventType.UPDATE, goog.bind(this.onSearchInputUpdate, this));
