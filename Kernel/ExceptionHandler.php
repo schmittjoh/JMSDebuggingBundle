@@ -56,8 +56,12 @@ class ExceptionHandler
         set_exception_handler(array($this, 'handle'));
     }
 
-    public function handle(\Exception $exception)
+    public function handle($exception)
     {
+        if ( ! $exception instanceof \Exception) {
+            throw $exception;
+        }
+
         try {
             try {
                 $request = $this->finder->find('Symfony\Component\HttpFoundation\Request', $exception);
