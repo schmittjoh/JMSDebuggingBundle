@@ -109,7 +109,6 @@ jms.app.DicVisualizer = function(dom, services, logMessages, maxLevel) {
      */
     this.displayServiceCreationButton_ = new goog.ui.Button('Created Services', goog.ui.LinkButtonRenderer.getInstance(), dom);
     this.displayServiceCreationButton_.addEventListener(goog.ui.Component.EventType.ACTION, goog.bind(function() {
-    	this.tracker_._trackEvent("UI", "click", "Created Services");
     	this.history_.setToken(this.router_.generate({'action': jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CREATION_PATH}));
     }, this));
     this.addChild(this.displayServiceCreationButton_, true);
@@ -120,22 +119,9 @@ jms.app.DicVisualizer = function(dom, services, logMessages, maxLevel) {
      */
     this.displayServiceCallsButton_ = new goog.ui.Button('Service Calls', goog.ui.LinkButtonRenderer.getInstance(), dom);
     this.displayServiceCallsButton_.addEventListener(goog.ui.Component.EventType.ACTION, goog.bind(function() {
-    	this.tracker_._trackEvent("UI", "click", "Service Calls");
     	this.history_.setToken(this.router_.generate({'action': jms.app.DicVisualizer.ACTIONS.DISPLAY_SERVICE_CALLS}));
     }, this));
     this.addChild(this.displayServiceCallsButton_, true);
-    
-    /**
-     * @private
-     * @type {_ga_tracker}
-     */
-    this.tracker_ = null;
-    goog.events.listenOnce(dom.getWindow(), goog.events.EventType.LOAD, function() {
-    	this.tracker_ = /** @type {_ga_tracker} */ (dom.getWindow()['_gat']._createTracker(jms.app.DicVisualizer.GA_ACCOUNT));
-    	this.tracker_._setDomainName('none');
-    	this.tracker_._setAllowHash(false);
-    	this.tracker_._trackPageview(this.history_.getToken());
-    }, undefined, this);
     
     /**
      * @private
@@ -267,7 +253,6 @@ jms.app.DicVisualizer.prototype.enterDocument = function() {
     
     var dom = this.getDomHelper();
     dom.appendChild(this.getElement(), soy.renderAsFragment(jms.templates.dic_visualizer.attribution));
-    dom.appendChild(dom.getDocument().body, dom.createDom('script', {'src': '//www.google-analytics.com/ga.js', 'type': 'text/javascript'}));
     
     var autocomplete = new goog.ui.AutoComplete.Basic(this.services_.getKeys(), this.searchInput_.getElement(), false, true);
     autocomplete.addEventListener(goog.ui.AutoComplete.EventType.UPDATE, goog.bind(this.onSearchInputUpdate, this));
@@ -389,15 +374,9 @@ jms.app.DicVisualizer.prototype.displayService = function(id, opt_level) {
     this.serviceGraph_ = new jms.ui.ServiceGraph(this.calculateSize_(this.vsm_.getSize()), digraph, nodePlacementStrategy, undefined, new jms.ui.graph.ArrowEdgeDrawingStrategy(), this.getDomHelper());
     this.serviceGraph_.addEventListener(goog.events.EventType.DBLCLICK, goog.bind(function(e) {
         var serviceNode = /** @type {!jms.ui.ServiceNode} */ (e.target);
-        
-        this.tracker_._trackEvent("UI", "dbclick", "Service");
-        
         this.changeHistory(serviceNode.getService().getId());
     }, this));
     this.serviceGraph_.addEventListener(goog.events.EventType.CONTEXTMENU, goog.bind(this.showContextmenu, this));
-    this.serviceGraph_.addEventListener(goog.fx.Dragger.EventType.END, goog.bind(function() {
-    	this.tracker_._trackEvent("UI", "drag", "Service");
-    }, this));
     this.addChild(this.serviceGraph_, true);
     
     goog.dom.classes.add(this.serviceGraph_.getUiNode(id).getElement(), 'jms-ui-node-highlight');
@@ -438,8 +417,6 @@ jms.app.DicVisualizer.prototype.showContextmenu = function(e) {
     var dom = this.getDomHelper();
     
     e.preventDefault();
-    
-    this.tracker_._trackEvent("UI", "click", "Service Contextmenu");
     
     this.contextMenu_.removeChildren(true);
     
@@ -542,8 +519,6 @@ jms.app.DicVisualizer.prototype.getServiceData_ = function(id) {
 jms.app.DicVisualizer.prototype.onSearchInputUpdate = function(e) {
     var id = /** @type {string} */ (e.row);
     
-    this.tracker_._trackEvent("UI", "change", "Search Input");
-    
     this.changeHistory(id);
 };
 
@@ -554,8 +529,6 @@ jms.app.DicVisualizer.prototype.onSearchInputUpdate = function(e) {
  */
 jms.app.DicVisualizer.prototype.onDirectionChange = function(e) {
     this.direction_ = /** @type {string} */ (e.target.getSelectedChoice());
-    
-    this.tracker_._trackEvent("UI", "click", "Direction Change");
     
     if (null !== this.currentServiceId_) {
         this.changeHistory(this.currentServiceId_);
